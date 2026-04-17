@@ -13,9 +13,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "BlueWaves | Admin Dashboard",
-  description: "Sistema de gestión de flota y leads de lujo",
+// app/layout.tsx
+
+export const metadata = {
+  title: "Blue Waves Cancun | Private Luxury Charters",
+  description: "Descubre la experiencia definitiva en alta mar. Alquiler de yates de lujo, catamaranes y experiencias personalizadas en el Caribe Mexicano.",
+  openGraph: {
+    title: "Blue Waves Cancun | Private Luxury Charters",
+    description: "Navega con estilo. Yates exclusivos y servicios de concierge de lujo en Cancún e Isla Mujeres.",
+    images: [
+      {
+        url: "/bluebueno.png", // Asegúrate de que esta imagen exista en tu carpeta public
+        width: 1200,
+        height: 630,
+        alt: "Blue Waves Cancun Luxury Yachts",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

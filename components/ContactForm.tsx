@@ -7,7 +7,9 @@ import { Loader2, CheckCircle2, ChevronDown } from 'lucide-react';
 export default function ContactForm() {
   const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [yachtList, setYachtList] = useState([]);
+  
+  // CORRECCIÓN DE TYPESCRIPT: Definimos explícitamente que es un array de strings
+  const [yachtList, setYachtList] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
     full_name: '',
@@ -26,23 +28,33 @@ export default function ContactForm() {
         .order('name', { ascending: true });
       
       if (!error && data) {
-        setYachtList(data.map(y => y.name));
+        // Mapeamos los nombres correctamente
+        setYachtList(data.map((y: { name: string }) => y.name));
       }
     };
     fetchYachtNames();
   }, []);
 
-  const handleChange = (e) => {
+  // CORRECCIÓN DE TYPESCRIPT: Definimos los tipos de eventos para el cambio de input
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       const { error: supabaseError } = await supabase
         .from('leads')
-        .insert([{ ...formData, status: 'nuevo' }]);
+        .insert([{ 
+          full_name: formData.full_name,
+          email: formData.email,
+          phone: formData.phone,
+          service_type: formData.service_type,
+          budget: formData.budget,
+          notes: formData.notes,
+          status: 'nuevo' 
+        }]);
 
       if (supabaseError) throw supabaseError;
 
@@ -67,7 +79,7 @@ export default function ContactForm() {
   return (
     <section id="contact" className="py-20 md:py-32 px-6 bg-[#F9FAFB] relative overflow-hidden">
       
-      {/* TEXTO DECORATIVO - Ajustado para no estorbar en móvil */}
+      {/* TEXTO DECORATIVO */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-[0.02] md:opacity-[0.03] select-none">
         <h2 className="text-[50vw] md:text-[30vw] font-serif italic text-[#0A192F] leading-none text-center">Inquiry</h2>
       </div>
@@ -88,33 +100,26 @@ export default function ContactForm() {
               onSubmit={handleSubmit} 
               className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 md:gap-y-16"
             >
-              {/* INPUT HELPER: Clase reutilizable para inputs */}
-              {[
-                { label: "Full Name", name: "full_name", type: "text", placeholder: "Julianne Moore" },
-                { label: "Email Address", name: "email", type: "email", placeholder: "client@luxury.com" },
-                { label: "Phone Number", name: "phone", type: "tel", placeholder: "+1 (555) 000-0000" }
-              ].map((input) => (
-                <div key={input.name} className="flex flex-col border-b border-zinc-300 pb-2 focus-within:border-[#0A192F] transition-all duration-500">
-                  <label className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-400 font-bold mb-2 md:mb-3">{input.label}</label>
-                  <input 
-                    name={input.name}
-                    type={input.type} 
-                    placeholder={input.placeholder} 
-                    required={input.name !== 'phone'}
-                    onChange={handleChange}
-                    className="bg-transparent outline-none font-serif text-xl md:text-2xl italic text-[#0A192F] placeholder:text-zinc-200" 
-                  />
-                </div>
-              ))}
+              {/* Inputs */}
+              <div className="flex flex-col border-b border-zinc-300 pb-2 focus-within:border-[#0A192F] transition-all duration-500">
+                <label className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-400 font-bold mb-2 md:mb-3">Full Name</label>
+                <input name="full_name" type="text" placeholder="Julianne Moore" required onChange={handleChange} className="bg-transparent outline-none font-serif text-xl md:text-2xl italic text-[#0A192F] placeholder:text-zinc-200" />
+              </div>
 
-              {/* SELECT DINÁMICO DE YATES */}
+              <div className="flex flex-col border-b border-zinc-300 pb-2 focus-within:border-[#0A192F] transition-all duration-500">
+                <label className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-400 font-bold mb-2 md:mb-3">Email Address</label>
+                <input name="email" type="email" placeholder="client@luxury.com" required onChange={handleChange} className="bg-transparent outline-none font-serif text-xl md:text-2xl italic text-[#0A192F] placeholder:text-zinc-200" />
+              </div>
+
+              <div className="flex flex-col border-b border-zinc-300 pb-2 focus-within:border-[#0A192F] transition-all duration-500">
+                <label className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-400 font-bold mb-2 md:mb-3">Phone Number</label>
+                <input name="phone" type="tel" placeholder="+1 (555) 000-0000" onChange={handleChange} className="bg-transparent outline-none font-serif text-xl md:text-2xl italic text-[#0A192F] placeholder:text-zinc-200" />
+              </div>
+
+              {/* Selects */}
               <div className="flex flex-col border-b border-zinc-300 pb-2 relative">
                 <label className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-400 font-bold mb-2 md:mb-3">Select Vessel</label>
-                <select 
-                  name="service_type"
-                  onChange={handleChange}
-                  className="bg-transparent outline-none font-serif text-xl md:text-2xl italic text-[#0A192F] appearance-none cursor-pointer pr-10"
-                >
+                <select name="service_type" onChange={handleChange} className="bg-transparent outline-none font-serif text-xl md:text-2xl italic text-[#0A192F] appearance-none cursor-pointer pr-10">
                   <option value="General Inquiry">General Inquiry</option>
                   {yachtList.map((yacht) => (
                     <option key={yacht} value={yacht}>{yacht}</option>
@@ -124,14 +129,9 @@ export default function ContactForm() {
                 <ChevronDown className="absolute bottom-3 right-0 w-4 h-4 text-zinc-300 pointer-events-none" />
               </div>
 
-              {/* SELECT PRESUPUESTO */}
               <div className="flex flex-col border-b border-zinc-300 pb-2 relative">
                 <label className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-400 font-bold mb-2 md:mb-3">Experience Budget (Daily)</label>
-                <select 
-                  name="budget"
-                  onChange={handleChange}
-                  className="bg-transparent outline-none font-serif text-xl md:text-2xl italic text-[#0A192F] appearance-none cursor-pointer pr-10"
-                >
+                <select name="budget" onChange={handleChange} className="bg-transparent outline-none font-serif text-xl md:text-2xl italic text-[#0A192F] appearance-none cursor-pointer pr-10">
                   <option>$5,000 — $15,000</option>
                   <option>$15,000 — $30,000</option>
                   <option>$30,000 — $60,000</option>
@@ -140,19 +140,11 @@ export default function ContactForm() {
                 <ChevronDown className="absolute bottom-3 right-0 w-4 h-4 text-zinc-300 pointer-events-none" />
               </div>
 
-              {/* TEXTAREA NOTAS */}
               <div className="md:col-span-2 flex flex-col border-b border-zinc-300 pb-2 focus-within:border-[#0A192F] transition-all duration-500">
-                <label className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-400 font-bold mb-2 md:mb-3">Special Notes & Requirements</label>
-                <textarea 
-                  name="notes"
-                  rows={1} 
-                  placeholder="Dietary preferences, security, etc." 
-                  onChange={handleChange}
-                  className="bg-transparent outline-none font-serif text-xl md:text-2xl italic text-[#0A192F] placeholder:text-zinc-200 resize-none min-h-[40px]" 
-                />
+                <label className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-zinc-400 font-bold mb-2 md:mb-3">Special Notes</label>
+                <textarea name="notes" rows={1} placeholder="Dietary preferences, security, etc." onChange={handleChange} className="bg-transparent outline-none font-serif text-xl md:text-2xl italic text-[#0A192F] placeholder:text-zinc-200 resize-none min-h-[40px]" />
               </div>
 
-              {/* BOTÓN SUBMIT */}
               <div className="md:col-span-2 flex justify-center mt-10 md:mt-16">
                 <motion.button 
                   whileHover={{ scale: 1.02, backgroundColor: "#1a2a3f" }} 
@@ -177,8 +169,8 @@ export default function ContactForm() {
               className="flex flex-col items-center text-center py-12 md:py-20"
             >
               <CheckCircle2 size={60} className="md:w-20 md:h-20 text-green-500 mb-6" />
-              <h3 className="font-serif text-3xl md:text-5xl italic text-[#0A192F] mb-4 px-4">Solicitud Recibida</h3>
-              <p className="text-zinc-500 uppercase tracking-[0.2em] md:tracking-[0.3em] text-[8px] md:text-[10px] max-w-xs md:max-w-none">Nuestro concierge se pondrá en contacto pronto.</p>
+              <h3 className="font-serif text-3xl md:text-5xl italic text-[#0A192F] mb-4">Solicitud Recibida</h3>
+              <p className="text-zinc-500 uppercase tracking-[0.2em] md:tracking-[0.3em] text-[8px] md:text-[10px]">Nuestro concierge se pondrá en contacto pronto.</p>
             </motion.div>
           )}
         </AnimatePresence>

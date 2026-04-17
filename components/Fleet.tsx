@@ -46,14 +46,14 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
     return (
       <div className="py-40 text-center bg-[#0A192F] text-white flex flex-col items-center gap-4">
         <Loader2 className="animate-spin text-blue-500" size={40} />
-        <p className="font-serif italic text-xl">Loading The Collection...</p>
+        <p className="font-serif italic text-xl tracking-widest">Loading The Collection...</p>
       </div>
     );
   }
 
   return (
     <section id="fleet" className="py-20 md:py-32 bg-[#0A192F] text-white">
-      <div className="max-w-7xl mx-auto px-6 text-center">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 text-center">
         <motion.span 
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
           className="text-[10px] tracking-[0.8em] uppercase text-blue-500 font-black mb-4 block"
@@ -62,34 +62,41 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
         </motion.span>
         <h2 className="font-serif text-5xl md:text-8xl italic font-light mb-12 md:mb-20">The Collection</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        {/* GRID: 2 columnas en móvil, 3 en desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-12">
           {yachts.map((yacht) => (
             <motion.div 
               key={yacht.id} 
               initial={{ opacity: 0, y: 30 }} 
               whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }} 
-              className="group text-left" 
+              className="group text-left cursor-pointer" 
               onClick={() => setSelectedYacht(yacht)}
             >
-              <div className="relative h-[450px] mb-8 overflow-hidden bg-zinc-900 shadow-2xl cursor-pointer rounded-sm">
+              <div className="relative h-[240px] md:h-[450px] mb-4 md:mb-8 overflow-hidden bg-zinc-900 shadow-2xl rounded-sm">
                 <Image 
                   src={(yacht.images && yacht.images.length > 0) ? yacht.images[0] : '/placeholder.png'} 
                   alt={yacht.name} 
                   fill 
                   quality={100}
-                  className="object-cover transition-all duration-1000 brightness-[0.7] group-hover:brightness-100 group-hover:scale-110" 
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover transition-all duration-1000 brightness-[0.8] md:brightness-[0.7] group-hover:brightness-100 group-hover:scale-110" 
+                  sizes="(max-width: 768px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F] via-transparent to-transparent opacity-60" />
-                <div className="absolute bottom-0 p-8 w-full translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                
+                <div className="absolute bottom-0 p-8 w-full translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 hidden md:block">
                   <button className="w-full py-4 bg-white text-black text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl hover:bg-blue-600 hover:text-white transition-colors">
                     Explore Vessel
                   </button>
                 </div>
               </div>
-              <h4 className="font-serif text-3xl font-light tracking-tight group-hover:text-blue-400 transition-colors">{yacht.name}</h4>
-              <p className="text-[10px] tracking-[0.4em] uppercase text-zinc-500 font-bold mt-2">{yacht.size} • Luxury Charter</p>
+
+              <h4 className="font-serif text-lg md:text-3xl font-light tracking-tight group-hover:text-blue-400 transition-colors truncate px-1">
+                {yacht.name}
+              </h4>
+              <p className="text-[8px] md:text-[10px] tracking-[0.2em] md:tracking-[0.4em] uppercase text-zinc-500 font-bold mt-1 md:mt-2 px-1">
+                {yacht.size} • Luxury Charter
+              </p>
             </motion.div>
           ))}
         </div>
@@ -109,13 +116,12 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
               </button>
 
               {/* GALERÍA */}
-              <div className="relative w-full md:w-[65%] h-[45vh] md:h-full bg-[#111] flex flex-col">
+              <div className="relative w-full md:w-[65%] h-[40vh] md:h-full bg-[#111] flex flex-col">
                 <div className="relative flex-1 w-full overflow-hidden cursor-zoom-in group" onClick={() => setIsZoomed(true)}>
                   <Image 
                     src={selectedYacht.images?.[currentImageIndex] || '/placeholder.png'} 
                     alt={selectedYacht.name} 
                     fill 
-                    quality={100}
                     className="object-cover transition-opacity duration-500" 
                     priority 
                     unoptimized
@@ -125,12 +131,11 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                   </div>
                 </div>
 
-                {/* MINIATURAS */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 px-4 py-3 bg-black/30 backdrop-blur-xl rounded-2xl max-w-[90%] overflow-x-auto scrollbar-hide z-20 shadow-2xl border border-white/10">
+                <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 bg-black/30 backdrop-blur-xl rounded-2xl max-w-[95%] overflow-x-auto scrollbar-hide z-20 shadow-2xl border border-white/10">
                   {selectedYacht.images?.map((img: string, index: number) => (
                     <div 
                       key={index} 
-                      className={`relative h-14 w-14 md:h-16 md:w-16 flex-shrink-0 cursor-pointer rounded-lg overflow-hidden transition-all duration-300 border-2 ${index === currentImageIndex ? 'border-blue-500 scale-110 shadow-lg' : 'border-transparent opacity-40 hover:opacity-80'}`} 
+                      className={`relative h-12 w-12 md:h-16 md:w-16 flex-shrink-0 cursor-pointer rounded-lg overflow-hidden transition-all duration-300 border-2 ${index === currentImageIndex ? 'border-blue-500 scale-105 shadow-lg' : 'border-transparent opacity-40 hover:opacity-80'}`} 
                       onClick={() => setCurrentImageIndex(index)}
                     >
                       <Image src={img} alt="thumb" fill className="object-cover" unoptimized />
@@ -140,21 +145,22 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
               </div>
 
               {/* INFO */}
-              <div className="w-full md:w-[35%] p-8 md:p-12 flex flex-col justify-between overflow-y-auto bg-white border-l border-zinc-100">
-                <div className="space-y-8">
+              <div className="w-full md:w-[35%] p-6 md:p-12 flex flex-col justify-between overflow-y-auto bg-white border-l border-zinc-100">
+                <div className="space-y-6 md:space-y-8">
                   <div>
-                    <span className="text-[10px] tracking-[0.5em] text-blue-600 uppercase font-black">Vessel Specifications</span>
-                    <h2 className="font-serif text-5xl italic text-[#0A192F] mt-2 mb-6 leading-tight">{selectedYacht.name}</h2>
-                    <div className="h-1 w-12 bg-blue-600 mb-8" />
+                    <span className="text-[9px] md:text-[10px] tracking-[0.5em] text-blue-600 uppercase font-black">Vessel Specifications</span>
+                    <h2 className="font-serif text-3xl md:text-5xl italic text-[#0A192F] mt-2 mb-4 md:mb-6 leading-tight">{selectedYacht.name}</h2>
+                    <div className="h-1 w-12 bg-blue-600 mb-6 md:mb-8" />
                   </div>
 
-                  <div className="max-h-[300px] overflow-y-auto pr-4 scrollbar-thin">
-                    <p className="text-zinc-600 font-light leading-relaxed text-base whitespace-pre-line">
+                  <div className="max-h-[150px] md:max-h-[300px] overflow-y-auto pr-4 scrollbar-thin">
+                    <p className="text-zinc-600 font-light leading-relaxed text-sm md:text-base whitespace-pre-line">
                       {selectedYacht.description}
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-x-6 gap-y-10 border-t border-zinc-100 pt-10">
+                  {/* ICONOS: Aquí corregí el error de md:size */}
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-10 border-t border-zinc-100 pt-6 md:pt-10">
                     <SpecItem label="Length" value={selectedYacht.size} icon={<Ruler size={16}/>} />
                     <SpecItem label="Capacity" value={`${selectedYacht.capacity} Guests`} icon={<Users size={16}/>} />
                     <SpecItem label="Cabins" value={`${selectedYacht.cabins} Rooms`} icon={<Wind size={16}/>} />
@@ -164,7 +170,7 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
 
                 <button 
                   onClick={() => { setSelectedYacht(null); scrollToContact(); }}
-                  className="mt-12 w-full bg-[#0A192F] text-white py-6 text-[11px] font-bold tracking-[0.4em] uppercase hover:bg-blue-600 transition-all shadow-2xl flex items-center justify-center gap-4 group"
+                  className="mt-8 md:mt-12 w-full bg-[#0A192F] text-white py-5 md:py-6 text-[10px] md:text-[11px] font-bold tracking-[0.4em] uppercase hover:bg-blue-600 transition-all shadow-2xl flex items-center justify-center gap-4 group"
                 >
                   Book This Experience
                   <motion.span animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>
@@ -175,7 +181,6 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
         )}
       </AnimatePresence>
 
-      {/* --- LIGHTBOX --- */}
       <AnimatePresence>
         {isZoomed && (
           <motion.div 
@@ -201,13 +206,14 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
 
 function SpecItem({ label, value, icon }: any) {
   return (
-    <div className="flex items-center gap-4 group">
-      <div className="w-10 h-10 rounded-full bg-zinc-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-sm border border-zinc-100">
+    <div className="flex items-center gap-3 md:gap-4 group">
+      {/* El tamaño del icono se hereda del padre, el responsive se maneja en el div que lo envuelve */}
+      <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-zinc-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-sm border border-zinc-100 flex-shrink-0">
         {icon}
       </div>
-      <div>
-        <p className="text-[8px] uppercase tracking-[0.2em] text-zinc-400 mb-0.5 font-bold">{label}</p>
-        <p className="text-sm font-bold text-[#0A192F] uppercase">{value}</p>
+      <div className="min-w-0">
+        <p className="text-[7px] md:text-[8px] uppercase tracking-[0.1em] md:tracking-[0.2em] text-zinc-400 mb-0.5 font-bold truncate">{label}</p>
+        <p className="text-[10px] md:text-sm font-bold text-[#0A192F] uppercase truncate">{value}</p>
       </div>
     </div>
   );

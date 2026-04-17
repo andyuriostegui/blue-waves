@@ -73,8 +73,8 @@ export default function Home() {
         <p className="font-serif text-4xl italic mb-6 text-[#0A192F]">Blue Waves</p>
         
         <div className="flex justify-center gap-8 mb-10 text-[9px] tracking-[0.4em] uppercase font-bold text-zinc-400">
-          <a href="#" className="hover:text-[#0A192F] transition-colors hover:tracking-[0.6em] duration-500 text-zinc-500">Instagram</a>
-          <a href="#" className="hover:text-[#0A192F] transition-colors hover:tracking-[0.6em] duration-500 text-zinc-500">Facebook</a>
+          <a href="https://www.instagram.com/bluewavescancun/" className="hover:text-[#0A192F] transition-colors hover:tracking-[0.6em] duration-500 text-zinc-500">Instagram</a>
+          <a href="https://www.facebook.com/bluewavescancun/" className="hover:text-[#0A192F] transition-colors hover:tracking-[0.6em] duration-500 text-zinc-500">Facebook</a>
           <a href="mailto:concierge@bluewaves.com" className="hover:text-[#0A192F] transition-colors text-zinc-500">Inquiries</a>
         </div>
 

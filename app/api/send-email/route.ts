@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     // IMPORTANTE: 'onboarding@resend.dev' es obligatorio si no has verificado un dominio
     const { data, error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: ['uriosteguiandres17@gmail.com'],      
+      to: ['bluewavescancun@gmail.com'],      
       subject: `⚓ Nueva Solicitud: ${full_name}`,
       html: `
         <div style="font-family: sans-serif; color: #1e3a8a; max-width: 600px; border: 1px solid #e0e5ec; padding: 20px; border-radius: 20px;">

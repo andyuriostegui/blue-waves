@@ -5,10 +5,26 @@ import { Navigation, Anchor } from "lucide-react";
 
 export default function RouteMap() {
   const stops = [
-    { point: "01", name: "Puerto Cancún", desc: "Departure from the heart of the luxury district." },
-    { point: "02", name: "Isla Mujeres", desc: "Turquoise waters and private beach club access." },
-    { point: "03", name: "Punta Sur", desc: "Cliffs and ancient Mayan ruins viewed from the sea." },
-    { point: "04", name: "Playa Norte", desc: "Sunset cocktails in the world's finest shallow waters." },
+    { 
+      point: "01", 
+      name: "Bahía de Cancún", 
+      desc: "Salida desde la bahía de Cancún. Comienzo del recorrido con los impresionantes cambios de color del agua hasta llegar al azul turquesa." 
+    },
+    { 
+      point: "02", 
+      name: "Punta Norte - Isla Mujeres", 
+      desc: "Primer punto principal. Aproximadamente 1 hora y media para nadar, comer, relajarse y disfrutar del paraíso." 
+    },
+    { 
+      point: "03", 
+      name: "Bahía de Isla Mujeres", 
+      desc: "Recorrido escénico por la bahía. Vistas espectaculares, aguas cristalinas y zonas super tranquilas." 
+    },
+    { 
+      point: "04", 
+      name: "Snorkel Spot", 
+      desc: "Snorkel en el punto ideal de la ruta. El capitán elegirá según el clima para la mejor experiencia." 
+    },
   ];
 
   return (
@@ -25,8 +41,8 @@ export default function RouteMap() {
           >
             <div className="relative h-[250px] sm:h-[350px] md:h-[600px] w-full rounded-sm overflow-hidden bg-[#f8f9fa] border border-zinc-100 shadow-2xl">
               <Image 
-                src="/ruta.jpg" 
-                alt="Bespoke Route Map" 
+                src="/rutab.jpg" 
+                alt="Mapa de Recorrido Catamarán - Cancún a Isla Mujeres" 
                 fill 
                 className="object-contain p-2 md:p-12 opacity-95 transition-transform duration-[5s] hover:scale-105"
                 sizes="(max-width: 1024px) 100vw, 60vw"
@@ -37,14 +53,13 @@ export default function RouteMap() {
               <div className="absolute bottom-4 right-4 border-r border-b border-zinc-200 w-10 h-10 pointer-events-none" />
             </div>
 
-            {/* CUADRO INFORMATIVO: CORREGIDO */}
+            {/* CUADRO INFORMATIVO: RENTA PRIVADA */}
             <div className="relative -mt-12 mx-auto md:absolute md:-bottom-8 md:-right-8 md:mt-0 bg-[#0A192F] text-white p-6 md:p-10 rounded-sm shadow-2xl z-20 w-[85%] md:w-[280px]">
-              {/* QUITAMOS md:size AQUÍ ABAJO */}
               <Navigation className="mb-4 text-blue-400" size={28} strokeWidth={1.5} />
-              <p className="text-[7px] md:text-[9px] uppercase tracking-[0.4em] font-bold text-white/50 mb-1 md:mb-2">Primary Route</p>
-              <h4 className="font-serif text-xl md:text-3xl italic leading-tight mb-2 md:mb-4">Mexican Caribbean</h4>
+              <p className="text-[7px] md:text-[9px] uppercase tracking-[0.4em] font-bold text-white/50 mb-1 md:mb-2">Ruta Privada</p>
+              <h4 className="font-serif text-xl md:text-3xl italic leading-tight mb-2 md:mb-4">Cancún → Isla Mujeres</h4>
               <p className="text-[9px] md:text-[10px] leading-relaxed text-white/60 font-light">
-                Our itineraries are curated to avoid crowds and maximize privacy.
+                Renta privada de catamarán. Tú decides cuánto tiempo quedarte en cada punto.
               </p>
             </div>
           </motion.div>
@@ -52,9 +67,9 @@ export default function RouteMap() {
           {/* --- LADO DERECHO: ITINERARIO --- */}
           <div className="lg:col-span-5 space-y-10 md:space-y-12 mt-16 md:mt-0 px-2 md:px-0">
             <div>
-              <span className="text-[8px] md:text-[9px] tracking-[0.6em] uppercase text-zinc-400 font-bold mb-3 md:mb-4 block">Navigation</span>
+              <span className="text-[8px] md:text-[9px] tracking-[0.6em] uppercase text-zinc-400 font-bold mb-3 md:mb-4 block">Navegación</span>
               <h2 className="font-serif text-4xl md:text-6xl italic leading-[1.1] text-[#0A192F]">
-                Tailored <br className="hidden md:block" /> Experiences.
+                Recorrido <br className="hidden md:block" /> Exclusivo.
               </h2>
             </div>
 
@@ -83,9 +98,10 @@ export default function RouteMap() {
             </div>
 
             <div className="pt-6 md:pt-10 flex items-center gap-4 text-[#0A192F]/40 italic">
-               {/* TAMBIÉN CORREGIMOS EL ANCHOR */}
-               <Anchor size={16} />
-               <p className="text-[9px] md:text-[10px] tracking-widest uppercase font-medium">Customizable Charters Available</p>
+              <Anchor size={16} />
+              <p className="text-[9px] md:text-[10px] tracking-widest uppercase font-medium">
+                Renta Privada • Tiempo ilimitado en cada parada
+              </p>
             </div>
           </div>
 

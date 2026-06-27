@@ -43,7 +43,7 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
             ))}
           </div>
 
-          {/* Botón Book Now (Siempre visible en desktop, opcional en móvil) */}
+          {/* Botón Book Now */}
           <button 
             onClick={scrollToContact} 
             className="bg-white text-black px-5 py-2 md:px-6 md:py-2 rounded-full text-[8px] md:text-[9px] font-bold tracking-widest hover:bg-zinc-200 transition shadow-lg"
@@ -65,7 +65,6 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Background blur */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -73,7 +72,6 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
               onClick={closeMenu}
               className="fixed inset-0 bg-[#0A192F]/80 backdrop-blur-md z-[100] md:hidden"
             />
-            {/* Slide menu */}
             <motion.div 
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -116,7 +114,7 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
         )}
       </AnimatePresence>
 
-      {/* CONTENIDO CENTRAL */}
+     {/* CONTENIDO CENTRAL */}
       <div className="relative z-[10] flex flex-col items-center justify-center h-full text-center px-4">
         <motion.span 
           initial={{ opacity: 0 }} 

@@ -131,12 +131,19 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                   </div>
                 </div>
 
-                <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 bg-black/30 backdrop-blur-xl rounded-2xl max-w-[95%] overflow-x-auto scrollbar-hide z-20 shadow-2xl border border-white/10">
+                {/* DETENCIÓN DE PROPAGACIÓN: Añadido onClick para frenar rebotes en el contenedor */}
+                <div 
+                  onClick={(e) => e.stopPropagation()} 
+                  className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-3 bg-black/30 backdrop-blur-xl rounded-2xl max-w-[95%] overflow-x-auto scrollbar-hide z-20 shadow-2xl border border-white/10"
+                >
                   {selectedYacht.images?.map((img: string, index: number) => (
                     <div 
                       key={index} 
                       className={`relative h-12 w-12 md:h-16 md:w-16 flex-shrink-0 cursor-pointer rounded-lg overflow-hidden transition-all duration-300 border-2 ${index === currentImageIndex ? 'border-blue-500 scale-105 shadow-lg' : 'border-transparent opacity-40 hover:opacity-80'}`} 
-                      onClick={() => setCurrentImageIndex(index)}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Evita traspasar el clic al grid del fondo en cel
+                        setCurrentImageIndex(index);
+                      }}
                     >
                       <Image src={img} alt="thumb" fill className="object-cover" unoptimized />
                     </div>
@@ -159,7 +166,6 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                     </p>
                   </div>
 
-                  {/* ICONOS: Aquí corregí el error de md:size */}
                   <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-10 border-t border-zinc-100 pt-6 md:pt-10">
                     <SpecItem label="Length" value={selectedYacht.size} icon={<Ruler size={16}/>} />
                     <SpecItem label="Capacity" value={`${selectedYacht.capacity} Guests`} icon={<Users size={16}/>} />
@@ -207,7 +213,6 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
 function SpecItem({ label, value, icon }: any) {
   return (
     <div className="flex items-center gap-3 md:gap-4 group">
-      {/* El tamaño del icono se hereda del padre, el responsive se maneja en el div que lo envuelve */}
       <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-zinc-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-sm border border-zinc-100 flex-shrink-0">
         {icon}
       </div>

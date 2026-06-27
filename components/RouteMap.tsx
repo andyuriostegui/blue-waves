@@ -41,7 +41,7 @@ export default function RouteMap() {
           >
             <div className="relative h-[250px] sm:h-[350px] md:h-[600px] w-full rounded-sm overflow-hidden bg-[#f8f9fa] border border-zinc-100 shadow-2xl">
               <Image 
-                src="/rutab.jpg" 
+                src="/rutabuena.jpg" 
                 alt="Mapa de Recorrido Catamarán - Cancún a Isla Mujeres" 
                 fill 
                 className="object-contain p-2 md:p-12 opacity-95 transition-transform duration-[5s] hover:scale-105"

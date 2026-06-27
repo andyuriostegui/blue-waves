@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from '@/lib/supabase';
 import { Loader2, CheckCircle2, ChevronDown } from 'lucide-react';
+import BookingCalendar from './BookingCalendar'; // Importamos el calendario custom
 
 export default function ContactForm() {
   const [loading, setLoading] = useState(false);
@@ -11,13 +12,15 @@ export default function ContactForm() {
   // CORRECCIÓN DE TYPESCRIPT: Definimos explícitamente que es un array de strings
   const [yachtList, setYachtList] = useState<string[]>([]);
 
+  // Agregamos 'booking_date' al estado inicial
   const [formData, setFormData] = useState({
     full_name: '',
     email: '',
     phone: '',
     service_type: 'General Inquiry',
     budget: '$5,000 — $15,000',
-    notes: ''
+    notes: '',
+    booking_date: '' // Se guardará como string formateado o ISO
   });
 
   useEffect(() => {
@@ -28,22 +31,29 @@ export default function ContactForm() {
         .order('name', { ascending: true });
       
       if (!error && data) {
-        // Mapeamos los nombres correctamente
         setYachtList(data.map((y: { name: string }) => y.name));
       }
     };
     fetchYachtNames();
   }, []);
 
-  // CORRECCIÓN DE TYPESCRIPT: Definimos los tipos de eventos para el cambio de input
+  // Manejador para actualizar la fecha desde el componente BookingCalendar
+  const handleDateChange = (date: Date | undefined) => {
+    setFormData(prev => ({
+      ...prev,
+      booking_date: date ? date.toISOString().split('T')[0] : '' // Formato YYYY-MM-DD para la DB
+    }));
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    loading(true);
     try {
+      // Insertamos en Supabase incluyendo la fecha seleccionada
       const { error: supabaseError } = await supabase
         .from('leads')
         .insert([{ 
@@ -53,6 +63,7 @@ export default function ContactForm() {
           service_type: formData.service_type,
           budget: formData.budget,
           notes: formData.notes,
+          booking_date: formData.booking_date, // Asegúrate de tener esta columna en tu tabla 'leads'
           status: 'nuevo' 
         }]);
 
@@ -138,6 +149,11 @@ export default function ContactForm() {
                   <option>Unlimited Luxe ($60k+)</option>
                 </select>
                 <ChevronDown className="absolute bottom-3 right-0 w-4 h-4 text-zinc-300 pointer-events-none" />
+              </div>
+
+              {/* CALENDARIO INTEGRADO INTEGRALMENTE */}
+              <div className="md:col-span-2 flex flex-col items-center mt-6">
+                <BookingCalendar onDateChange={handleDateChange} />
               </div>
 
               <div className="md:col-span-2 flex flex-col border-b border-zinc-300 pb-2 focus-within:border-[#0A192F] transition-all duration-500">

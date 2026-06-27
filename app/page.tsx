@@ -1,4 +1,3 @@
-
 'use client'
 export const dynamic = 'force-dynamic'
 
@@ -7,6 +6,7 @@ import Hero from "@/components/Hero";
 import AboutTrust from "@/components/AboutTrust";
 import RouteMap from "@/components/RouteMap"; 
 import Fleet from "@/components/Fleet";
+import Testimonios from "@/components/Testimonios";
 import Toys from "@/components/Toys";
 import ContactForm from "@/components/ContactForm";
 import WaveDivider from "@/components/WaveDivider";
@@ -62,6 +62,10 @@ export default function Home() {
 
         {/* 5. ADRENALINA (Jetskis y Juguetes) */}
         <Toys /> 
+
+        {/* 5.5 TESTIMONIOS (Reviews de Google Maps) */}
+        <Testimonios />
+
 
         {/* 6. CONVERSIÓN (Formulario Concierge) */}
         <ContactForm />

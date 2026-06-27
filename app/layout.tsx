@@ -1,5 +1,4 @@
-'use client'
-import { usePathname } from 'next/navigation';
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -15,16 +14,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// ESTO ES LO QUE GOOGLE LEE
+export const metadata: Metadata = {
+  title: 'Blue Waves Cancún | Renta de Yates de Lujo',
+  description: 'Descubre el Caribe a bordo de nuestra flota exclusiva. Salida desde la bahía de Cancún con impresionantes cambios de color del agua hasta llegar al azul turquesa.',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-
-  // CONDICIÓN: Si la ruta empieza con /dashboard, ocultamos el botón
-  const isDashboardPage = pathname?.startsWith('/dashboard');
-
   return (
     <html
       lang="es"
@@ -37,8 +37,8 @@ export default function RootLayout({
       >
         {children}
         
-        {/* Solo mostramos el botón si NO estamos en el dashboard */}
-        {!isDashboardPage && <WhatsAppButton />}
+        {/* El botón ahora se controla solo */}
+        <WhatsAppButton />
         
         <Toaster 
           position="top-right" 

@@ -51,7 +51,7 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    loading(true);
+    setLoading(true);
     try {
       // Insertamos en Supabase incluyendo la fecha seleccionada
       const { error: supabaseError } = await supabase

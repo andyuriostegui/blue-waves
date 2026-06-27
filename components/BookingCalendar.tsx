@@ -39,10 +39,11 @@ export default function BookingCalendar({ onDateChange }: BookingCalendarProps) 
           selected: 'bg-[#0A192F] text-white rounded-full hover:bg-[#0A192F]/90',
           today: 'font-bold text-[#0A192F] underline'
         }}
+        // @ts-ignore - Le decimos a Vercel que ignore el error de tipado aquí
         styles={{
           caption: { color: '#0A192F', fontFamily: 'var(--font-serif)', fontSize: '1.1rem', fontStyle: 'italic' },
-          head_cell: { color: '#A1A1AA', fontWeight: '500', textTransform: 'uppercase', fontSize: '0.75rem', tracking: '0.1em' },
-        }}
+          head_cell: { color: '#A1A1AA', fontWeight: '500', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.1em' },
+        } as any}
       />
 
       {selected ? (

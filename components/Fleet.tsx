@@ -34,18 +34,40 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
 
   useEffect(() => { fetchYachts(); }, []);
 
+  // Función maestra para cerrar el modal limpiando el historial del celular
+  const closeModal = () => {
+    setSelectedYacht(null);
+    setIsZoomed(false);
+    if (window.history.state?.modal === 'abierto') {
+      window.history.back();
+    }
+  };
+
   useEffect(() => {
     if (selectedYacht) {
       document.body.style.overflow = 'hidden';
-      // Bloquea el swipe-back del navegador en iOS/Android
+      
+      // 1. Inyectamos una página falsa para interceptar el botón "Atrás" del celular
+      window.history.pushState({ modal: 'abierto' }, '');
+
+      // 2. Escuchamos si el usuario presiona "Atrás" en su cel
+      const handlePhoneBackButton = () => {
+        setSelectedYacht(null);
+        setIsZoomed(false);
+      };
+      window.addEventListener('popstate', handlePhoneBackButton);
+
+      // 3. Bloquea el swipe-back del navegador en iOS/Android (ignorando botones)
       const preventSwipe = (e: TouchEvent) => {
-        // Solo prevenimos si el toque empieza cerca del borde (donde el navegador intercepta)
+        if ((e.target as HTMLElement).closest('button')) return; // Ignora si tocan un botón
         if (e.touches[0].clientX < 30 || e.touches[0].clientX > window.innerWidth - 30) {
           e.preventDefault();
         }
       };
       document.addEventListener('touchstart', preventSwipe, { passive: false });
+
       return () => {
+        window.removeEventListener('popstate', handlePhoneBackButton);
         document.removeEventListener('touchstart', preventSwipe);
       };
     } else {
@@ -76,7 +98,6 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
 
-    // Solo actúa si el swipe es más horizontal que vertical (evita conflicto con scroll)
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
       if (dx < 0) nextImage();
       else prevImage();
@@ -127,7 +148,7 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F] via-transparent to-transparent opacity-60" />
                 <div className="absolute bottom-0 p-8 w-full translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 hidden md:block">
-                  <button className="w-full py-4 bg-white text-black text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl hover:bg-blue-600 hover:text-white transition-colors">
+                  <button type="button" className="w-full py-4 bg-white text-black text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl hover:bg-blue-600 hover:text-white transition-colors">
                     Explore Vessel
                   </button>
                 </div>
@@ -148,25 +169,24 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
         {selectedYacht && (
           <div
             ref={modalRef}
-            // touch-action: none previene que el navegador tome el control de los gestos
             style={{ touchAction: 'none' }}
             className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-6 overflow-hidden"
           >
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              onClick={() => setSelectedYacht(null)}
+              onClick={closeModal}
               className="absolute inset-0 bg-black/98 backdrop-blur-md"
             />
 
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-              // touch-action: pan-y permite scroll vertical en el panel de info pero no swipe horizontal
               style={{ touchAction: 'pan-y' }}
               className="relative w-full h-full md:h-[90vh] md:max-w-7xl bg-white text-black overflow-hidden flex flex-col md:flex-row shadow-2xl"
             >
               {/* Botón cerrar */}
               <button
-                onClick={() => setSelectedYacht(null)}
+                type="button"
+                onClick={closeModal}
                 className="absolute top-4 right-4 z-[110] p-2.5 bg-black/40 backdrop-blur-md rounded-full text-white hover:bg-black/70 transition-colors"
               >
                 <X className="w-6 h-6" strokeWidth={1.5} />
@@ -177,7 +197,6 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                 className="relative w-full md:w-[65%] h-[45vh] md:h-full bg-[#111] flex flex-col"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
-                // pan-x permite que el swipe horizontal lo manejemos nosotros
                 style={{ touchAction: 'pan-x' }}
               >
                 <div
@@ -193,17 +212,19 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                     unoptimized
                   />
 
-                  {/* Flechas de navegación (desktop hover, móvil siempre visibles) */}
+                  {/* Flechas de navegación */}
                   {selectedYacht.images?.length > 1 && (
                     <>
                       <button
-                        onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                        type="button"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); prevImage(); }}
                         className="absolute left-3 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/40 backdrop-blur-sm rounded-full text-white hover:bg-black/70 transition-colors md:opacity-0 md:group-hover:opacity-100"
                       >
                         <ChevronLeft size={22} />
                       </button>
                       <button
-                        onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                        type="button"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); nextImage(); }}
                         className="absolute right-3 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/40 backdrop-blur-sm rounded-full text-white hover:bg-black/70 transition-colors md:opacity-0 md:group-hover:opacity-100"
                       >
                         <ChevronRight size={22} />
@@ -245,7 +266,7 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                 </div>
               </div>
 
-              {/* PANEL INFO — scroll vertical permitido */}
+              {/* PANEL INFO */}
               <div
                 style={{ touchAction: 'pan-y' }}
                 className="w-full md:w-[35%] p-6 md:p-12 flex flex-col justify-between overflow-y-auto bg-white border-l border-zinc-100"
@@ -270,7 +291,8 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                 </div>
 
                 <button
-                  onClick={() => { setSelectedYacht(null); scrollToContact(); }}
+                  type="button"
+                  onClick={() => { closeModal(); scrollToContact(); }}
                   className="mt-8 md:mt-12 w-full bg-[#0A192F] text-white py-5 md:py-6 text-[10px] md:text-[11px] font-bold tracking-[0.4em] uppercase hover:bg-blue-600 transition-all shadow-2xl flex items-center justify-center gap-4 group"
                 >
                   Book This Experience
@@ -306,13 +328,15 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
             {selectedYacht.images?.length > 1 && (
               <>
                 <button
-                  onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); prevImage(); }}
                   className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-colors"
                 >
                   <ChevronLeft size={28} />
                 </button>
                 <button
-                  onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); nextImage(); }}
                   className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-colors"
                 >
                   <ChevronRight size={28} />

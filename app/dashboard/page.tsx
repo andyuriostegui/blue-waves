@@ -5,6 +5,12 @@ import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
+import { getYachtSlug } from '@/lib/yachts'
+import {
+  loadYachtReviews,
+  saveYachtReviews,
+  type YachtReview,
+} from '@/lib/yacht-reviews'
 import imageCompression from 'browser-image-compression'
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
 
@@ -46,6 +52,7 @@ export default function DashboardPage() {
 
   const [files, setFiles] = useState<FileList | null>(null)
   const [previewUrls, setPreviewUrls] = useState<string[]>([])
+  const [yachtReviews, setYachtReviews] = useState<YachtReview[]>([])
 
   const fetchData = async () => {
     try {
@@ -141,6 +148,7 @@ export default function DashboardPage() {
         images: updatedImages
       }).eq('id', currentYacht.id)
       if (error) throw error
+      await saveYachtReviews(currentYacht.id, yachtReviews)
       toast.success("Guardado", { id: tid })
       closeEditModal(); fetchData()
     } catch (err: any) { toast.error(err.message, { id: tid }) } finally { setSaving(false) }
@@ -166,10 +174,17 @@ export default function DashboardPage() {
         features: Array.isArray(yacht.features) ? yacht.features.join(', ') : yacht.features,
         includes: Array.isArray(yacht.includes) ? yacht.includes.join(', ') : yacht.includes
     })
+    setYachtReviews([])
     setIsDetailMode(!edit); setIsEditModalOpen(true)
+    void loadYachtReviews(yacht.id, getYachtSlug(yacht)).then(setYachtReviews)
   }
 
-  const closeEditModal = () => { setIsEditModalOpen(false); setFiles(null); setPreviewUrls([]) }
+  const closeEditModal = () => {
+    setIsEditModalOpen(false)
+    setFiles(null)
+    setPreviewUrls([])
+    setYachtReviews([])
+  }
   const handleLogout = async () => { await supabase.auth.signOut(); router.push('/auth') }
 
   if (loading) return <div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center"><Loader2 className="animate-spin text-blue-600" size={40} /></div>
@@ -358,6 +373,88 @@ export default function DashboardPage() {
                     <div className="space-y-1"><p className="text-[9px] font-black text-blue-500 ml-3 uppercase">Cabinas</p><input disabled={isDetailMode} value={currentYacht.cabins} onChange={e => setCurrentYacht({...currentYacht, cabins: e.target.value})} className={`w-full ${neuIn} rounded-2xl py-3 px-5 outline-none text-sm disabled:opacity-70`} /></div>
                 </div>
                 <div className="space-y-1"><p className="text-[9px] font-black text-blue-500 ml-3 uppercase">Descripción</p><textarea disabled={isDetailMode} value={currentYacht.description} onChange={e => setCurrentYacht({...currentYacht, description: e.target.value})} rows={3} className={`w-full ${neuIn} rounded-2xl py-3 px-5 outline-none text-sm resize-none disabled:opacity-70`} /></div>
+
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[9px] font-black text-blue-500 ml-3 uppercase italic">Reseñas de este yate</p>
+                    {!isDetailMode && (
+                      <button
+                        type="button"
+                        onClick={() => setYachtReviews((prev) => [...prev, { author: '', quote: '', rating: 5, source: 'Google' }])}
+                        className={`px-3 py-1.5 rounded-xl ${neuBtn} text-[10px] font-bold uppercase text-blue-600`}
+                      >
+                        + Nota
+                      </button>
+                    )}
+                  </div>
+                  {yachtReviews.length === 0 ? (
+                    <p className="text-xs text-zinc-400 px-3">Todavía no hay reseñas en esta ficha.</p>
+                  ) : yachtReviews.map((review, index) => (
+                    <div key={index} className={`${neuIn} rounded-2xl p-4 space-y-3`}>
+                      <div className="grid grid-cols-2 gap-3">
+                        <input
+                          disabled={isDetailMode}
+                          placeholder="Nombre"
+                          value={review.author}
+                          onChange={(e) => {
+                            const next = [...yachtReviews]
+                            next[index] = { ...next[index], author: e.target.value }
+                            setYachtReviews(next)
+                          }}
+                          className="bg-transparent outline-none text-sm disabled:opacity-70"
+                        />
+                        <div className="flex items-center gap-2">
+                          <select
+                            disabled={isDetailMode}
+                            value={review.rating}
+                            onChange={(e) => {
+                              const next = [...yachtReviews]
+                              next[index] = { ...next[index], rating: Number(e.target.value) }
+                              setYachtReviews(next)
+                            }}
+                            className="bg-transparent outline-none text-sm disabled:opacity-70"
+                          >
+                            {[5, 4, 3, 2, 1].map((value) => (
+                              <option key={value} value={value}>{value} estrellas</option>
+                            ))}
+                          </select>
+                          {!isDetailMode && (
+                            <button
+                              type="button"
+                              onClick={() => setYachtReviews(yachtReviews.filter((_, i) => i !== index))}
+                              className="text-red-400"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      <textarea
+                        disabled={isDetailMode}
+                        placeholder="La experiencia a bordo..."
+                        value={review.quote}
+                        rows={2}
+                        onChange={(e) => {
+                          const next = [...yachtReviews]
+                          next[index] = { ...next[index], quote: e.target.value }
+                          setYachtReviews(next)
+                        }}
+                        className="w-full bg-transparent outline-none text-sm resize-none disabled:opacity-70"
+                      />
+                      <input
+                        disabled={isDetailMode}
+                        placeholder="Fuente (Google, huésped...)"
+                        value={review.source ?? ''}
+                        onChange={(e) => {
+                          const next = [...yachtReviews]
+                          next[index] = { ...next[index], source: e.target.value }
+                          setYachtReviews(next)
+                        }}
+                        className="w-full bg-transparent outline-none text-[11px] uppercase tracking-wide disabled:opacity-70"
+                      />
+                    </div>
+                  ))}
+                </div>
                 
                 {!isDetailMode && (
                   <div className="space-y-4 pt-4">

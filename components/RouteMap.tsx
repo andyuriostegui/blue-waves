@@ -71,6 +71,9 @@ export default function RouteMap() {
               <h2 className="font-serif text-4xl md:text-6xl italic leading-[1.1] text-[#0A192F]">
                 Recorrido <br className="hidden md:block" /> Exclusivo.
               </h2>
+              <p className="mt-4 text-sm md:text-base font-light leading-relaxed text-zinc-500 max-w-md">
+                Tour en yate privado de Cancún a Isla Mujeres: bahía, Punta Norte y snorkel, con el tiempo que ustedes decidan en cada parada.
+              </p>
             </div>
 
             <div className="space-y-8 md:space-y-12">

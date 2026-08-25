@@ -34,7 +34,7 @@ export default function Toys() {
           >
             <Image 
               src="/jetski.png" 
-              alt="Luxury Water Toys Experience" 
+              alt="Jet ski y water toys para complementar la renta de yate en Cancún" 
               fill 
               className="object-cover transition-transform duration-1000 group-hover:scale-110"
               sizes="(max-width: 1024px) 100vw, 50vw"

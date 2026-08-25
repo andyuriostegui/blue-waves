@@ -1,38 +1,28 @@
 'use client'
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Ruler, Users, Wind, Anchor, Maximize2, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { getYachtSlug, type Yacht } from "@/lib/yachts";
 
-export default function Fleet({ scrollToContact }: { scrollToContact: () => void }) {
-  const [yachts, setYachts] = useState<any[]>([]);
-  const [selectedYacht, setSelectedYacht] = useState<any>(null);
+export default function Fleet({
+  scrollToContact,
+  yachts,
+  loading,
+}: {
+  scrollToContact: (yachtName?: string) => void
+  yachts: Yacht[]
+  loading: boolean
+}) {
+  const [selectedYacht, setSelectedYacht] = useState<Yacht | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   // Touch swipe tracking
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
-
-  const fetchYachts = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('yachts')
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      if (data) setYachts(data);
-    } catch (error) {
-      console.error("Error cargando la flota:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => { fetchYachts(); }, []);
 
   // Función maestra para cerrar el modal limpiando el historial del celular
   const closeModal = () => {
@@ -78,13 +68,15 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
   }, [selectedYacht]);
 
   const nextImage = () => {
-    if (!selectedYacht?.images) return;
-    setCurrentImageIndex(i => (i + 1) % selectedYacht.images.length);
+    const gallery = selectedYacht?.images
+    if (!gallery?.length) return;
+    setCurrentImageIndex(i => (i + 1) % gallery.length);
   };
 
   const prevImage = () => {
-    if (!selectedYacht?.images) return;
-    setCurrentImageIndex(i => (i - 1 + selectedYacht.images.length) % selectedYacht.images.length);
+    const gallery = selectedYacht?.images
+    if (!gallery?.length) return;
+    setCurrentImageIndex(i => (i - 1 + gallery.length) % gallery.length);
   };
 
   // Handlers de swipe en la galería principal
@@ -111,7 +103,7 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
     return (
       <div className="py-40 text-center bg-[#0A192F] text-white flex flex-col items-center gap-4">
         <Loader2 className="animate-spin text-blue-500" size={40} />
-        <p className="font-serif italic text-xl tracking-widest">Loading The Collection...</p>
+        <p className="font-serif italic text-xl tracking-widest">Cargando la flota...</p>
       </div>
     );
   }
@@ -123,7 +115,7 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
           className="text-[10px] tracking-[0.8em] uppercase text-blue-500 font-black mb-4 block"
         >
-          Exclusive Fleet
+          Yates en renta en Cancún
         </motion.span>
         <h2 className="font-serif text-5xl md:text-8xl italic font-light mb-12 md:mb-20">The Collection</h2>
 
@@ -140,24 +132,35 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
               <div className="relative h-[240px] md:h-[450px] mb-4 md:mb-8 overflow-hidden bg-zinc-900 shadow-2xl rounded-sm">
                 <Image
                   src={(yacht.images && yacht.images.length > 0) ? yacht.images[0] : '/placeholder.png'}
-                  alt={yacht.name}
+                  alt={`Renta del yate ${yacht.name} en Cancún`}
                   fill
                   quality={100}
                   className="object-cover transition-all duration-1000 brightness-[0.8] md:brightness-[0.7] group-hover:brightness-100 group-hover:scale-110"
                   sizes="(max-width: 768px) 50vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F] via-transparent to-transparent opacity-60" />
-                <div className="absolute bottom-0 p-8 w-full translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 hidden md:block">
-                  <button type="button" className="w-full py-4 bg-white text-black text-[10px] font-bold uppercase tracking-[0.2em] shadow-xl hover:bg-blue-600 hover:text-white transition-colors">
-                    Explore Vessel
-                  </button>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F] via-transparent to-transparent opacity-70 md:opacity-50 md:group-hover:opacity-80 transition-opacity duration-500" />
+                <div className="absolute inset-x-0 bottom-0 flex justify-center px-3 pb-3 md:px-6 md:pb-8">
+                  <Link
+                    href={`/yates/${getYachtSlug(yacht)}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-4 py-2 text-[8px] font-medium uppercase tracking-[0.28em] text-white backdrop-blur-md transition duration-500 hover:border-white hover:bg-white hover:text-[#0A192F] md:translate-y-3 md:px-6 md:py-2.5 md:text-[9px] md:tracking-[0.32em] md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100"
+                  >
+                    Ver yate
+                    <span className="text-[11px] leading-none md:text-xs">→</span>
+                  </Link>
                 </div>
               </div>
-              <h4 className="font-serif text-lg md:text-3xl font-light tracking-tight group-hover:text-blue-400 transition-colors truncate px-1">
-                {yacht.name}
-              </h4>
+              <h3 className="font-serif text-lg md:text-3xl font-light tracking-tight group-hover:text-blue-400 transition-colors truncate px-1">
+                <Link
+                  href={`/yates/${getYachtSlug(yacht)}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="hover:underline decoration-1 underline-offset-4"
+                >
+                  {yacht.name}
+                </Link>
+              </h3>
               <p className="text-[8px] md:text-[10px] tracking-[0.2em] md:tracking-[0.4em] uppercase text-zinc-500 font-bold mt-1 md:mt-2 px-1">
-                {yacht.size} • Luxury Charter
+                {yacht.size} • Charter en Cancún
               </p>
             </motion.div>
           ))}
@@ -213,7 +216,7 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                   />
 
                   {/* Flechas de navegación */}
-                  {selectedYacht.images?.length > 1 && (
+                  {(selectedYacht.images?.length ?? 0) > 1 && (
                     <>
                       <button
                         type="button"
@@ -233,9 +236,9 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                   )}
 
                   {/* Indicador de imagen actual en móvil */}
-                  {selectedYacht.images?.length > 1 && (
+                  {(selectedYacht.images?.length ?? 0) > 1 && (
                     <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-1.5 md:hidden z-20">
-                      {selectedYacht.images.map((_: any, i: number) => (
+                      {(selectedYacht.images ?? []).map((_: string, i: number) => (
                         <div
                           key={i}
                           className={`h-1 rounded-full transition-all duration-300 ${i === currentImageIndex ? 'w-6 bg-white' : 'w-1.5 bg-white/40'}`}
@@ -283,21 +286,29 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-10 border-t border-zinc-100 pt-6 md:pt-10">
-                    <SpecItem label="Length" value={selectedYacht.size} icon={<Ruler size={16} />} />
+                    <SpecItem label="Length" value={selectedYacht.size ?? '—'} icon={<Ruler size={16} />} />
                     <SpecItem label="Capacity" value={`${selectedYacht.capacity} Guests`} icon={<Users size={16} />} />
                     <SpecItem label="Cabins" value={`${selectedYacht.cabins} Rooms`} icon={<Wind size={16} />} />
                     <SpecItem label="Bathrooms" value={`${selectedYacht.bathrooms} WC`} icon={<Anchor size={16} />} />
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => { closeModal(); scrollToContact(); }}
-                  className="mt-8 md:mt-12 w-full bg-[#0A192F] text-white py-5 md:py-6 text-[10px] md:text-[11px] font-bold tracking-[0.4em] uppercase hover:bg-blue-600 transition-all shadow-2xl flex items-center justify-center gap-4 group"
-                >
-                  Book This Experience
-                  <motion.span animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>
-                </button>
+                <div className="mt-8 md:mt-12 space-y-3">
+                  <Link
+                    href={`/yates/${getYachtSlug(selectedYacht)}`}
+                    className="w-full border border-[#0A192F] text-[#0A192F] py-4 text-[10px] md:text-[11px] font-bold tracking-[0.4em] uppercase hover:bg-[#0A192F] hover:text-white transition-all flex items-center justify-center"
+                  >
+                    Ver ficha completa
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => { closeModal(); scrollToContact(selectedYacht.name); }}
+                    className="w-full bg-[#0A192F] text-white py-5 md:py-6 text-[10px] md:text-[11px] font-bold tracking-[0.4em] uppercase hover:bg-blue-600 transition-all shadow-2xl flex items-center justify-center gap-4 group"
+                  >
+                    Book This Experience
+                    <motion.span animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>
+                  </button>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -317,7 +328,7 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
           >
             <div className="relative w-full h-full max-w-7xl">
               <Image
-                src={selectedYacht.images?.[currentImageIndex] || '/placeholder.png'}
+                src={selectedYacht?.images?.[currentImageIndex] || '/placeholder.png'}
                 alt="Zoom"
                 fill
                 className="object-contain"
@@ -325,7 +336,7 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
               />
             </div>
             {/* Flechas en zoom */}
-            {selectedYacht.images?.length > 1 && (
+            {(selectedYacht?.images?.length ?? 0) > 1 && (
               <>
                 <button
                   type="button"
@@ -350,7 +361,15 @@ export default function Fleet({ scrollToContact }: { scrollToContact: () => void
   );
 }
 
-function SpecItem({ label, value, icon }: any) {
+function SpecItem({
+  label,
+  value,
+  icon,
+}: {
+  label: string
+  value: string
+  icon: ReactNode
+}) {
   return (
     <div className="flex items-center gap-3 md:gap-4 group">
       <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-zinc-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-sm border border-zinc-100 flex-shrink-0">

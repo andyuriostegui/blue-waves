@@ -25,7 +25,7 @@ export async function POST(req: Request) {
           <p style="font-size: 14px; color: #555;"><strong>Email:</strong> ${email}</p>
           <p style="font-size: 14px; color: #555;"><strong>Teléfono:</strong> ${phone}</p>
           <p style="font-size: 14px; color: #555;"><strong>Servicio:</strong> ${service_type}</p>
-          <p style="font-size: 14px; color: #555;"><strong>Presupuesto Diario:</strong> ${budget}</p>
+          <p style="font-size: 14px; color: #555;"><strong>Duración del charter:</strong> ${budget}</p>
           <div style="background: #f9fafb; padding: 15px; border-radius: 10px; margin-top: 20px;">
             <p style="font-size: 14px; margin: 0;"><strong>Notas Especiales:</strong></p>
             <p style="font-size: 14px; color: #333; font-style: italic;">${notes || 'Sin notas adicionales'}</p>

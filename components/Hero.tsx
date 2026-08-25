@@ -19,7 +19,7 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
     <section className="relative h-screen w-full overflow-hidden bg-[#0B2A30]">
       <Image 
         src="/bluebueno.png" 
-        alt="Hero" 
+        alt="Yate de lujo en Cancún — renta de charter privado Blue Waves"
         fill 
         className="object-cover opacity-80 scale-110 md:scale-105"
         priority 
@@ -116,21 +116,25 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
 
      {/* CONTENIDO CENTRAL */}
       <div className="relative z-[10] flex flex-col items-center justify-center h-full text-center px-4">
-        <motion.span 
-          initial={{ opacity: 0 }} 
-          animate={{ opacity: 1 }} 
-          className="text-white/60 tracking-[0.4em] md:tracking-[0.8em] uppercase text-[8px] md:text-[9px] mb-4"
-        >
-          Est. 2026
-        </motion.span>
-        
-        <motion.h1 
+        <motion.p 
           initial={{ opacity: 0, y: 30 }} 
           animate={{ opacity: 1, y: 0 }} 
           className="font-serif text-[18vw] md:text-[12vw] text-white leading-none italic font-light drop-shadow-2xl"
         >
           Blue Waves
-        </motion.h1>
+        </motion.p>
+        <h1 className="mt-6 text-white/70 tracking-[0.25em] md:tracking-[0.45em] uppercase text-[8px] md:text-[10px] font-medium">
+          Renta de yates de lujo en Cancún
+        </h1>
+        <motion.a
+          href="#fleet"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.5 }}
+          className="mt-10 inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.28em] text-[#0A192F] shadow-lg transition hover:bg-zinc-200"
+        >
+          Ver flota
+        </motion.a>
       </div>
     </section>
   );

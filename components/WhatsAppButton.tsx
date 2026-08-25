@@ -1,17 +1,16 @@
 'use client'
 import { motion } from "framer-motion";
 import { usePathname } from 'next/navigation';
+import { DEFAULT_WHATSAPP_MESSAGE, getWhatsAppUrl } from '@/lib/site';
 
 export default function WhatsAppButton() {
   const pathname = usePathname();
   const isDashboardPage = pathname?.startsWith('/dashboard');
+  const isYachtPage = pathname?.startsWith('/yates');
 
-  // Si estamos en el dashboard, no renderiza nada (se oculta)
   if (isDashboardPage) return null;
 
-  const phoneNumber = "+5219982322661"; // Asegúrate de que este sea el número real
-  const message = "Hola Blue Waves, me gustaría solicitar información sobre la flota de yates.";
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+  const whatsappUrl = getWhatsAppUrl(DEFAULT_WHATSAPP_MESSAGE);
 
   return (
     <motion.a
@@ -23,7 +22,7 @@ export default function WhatsAppButton() {
       transition={{ type: "spring", stiffness: 260, damping: 20, delay: 1 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      className="fixed bottom-6 right-6 z-[999] bg-[#25D366] text-white p-4 rounded-full shadow-[0_10px_30px_rgba(37,211,102,0.4)]"
+      className={`fixed right-5 z-[999] bg-[#25D366] text-white p-4 rounded-full shadow-[0_10px_30px_rgba(37,211,102,0.4)] ${isYachtPage ? 'bottom-24 lg:bottom-6' : 'bottom-6'}`}
       title="Chat on WhatsApp"
     >
       {/* --- SVG OFICIAL DE WHATSAPP --- */}

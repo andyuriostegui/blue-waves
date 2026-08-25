@@ -11,7 +11,7 @@ export default function AboutTrust() {
   ];
 
   return (
-    <section className="relative py-24 md:py-40 px-6 bg-[#0B2A30] overflow-hidden -mt-1 z-10">
+    <section id="about" className="relative py-24 md:py-40 px-6 bg-[#0B2A30] overflow-hidden -mt-1 z-10">
       
       {/* --- VIDEO DE FONDO FUSIONADO --- */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -56,6 +56,9 @@ export default function AboutTrust() {
             
             <p className="text-white/70 font-light text-lg md:text-xl leading-relaxed max-w-lg italic">
               "We curate <span className="text-white font-medium not-italic">private sanctuaries</span> where the horizon is your only limit."
+            </p>
+            <p className="text-white/75 font-light text-sm md:text-base leading-relaxed max-w-lg">
+              Renta de yates de lujo en Cancún: charter privado, salida desde la bahía y ruta a Isla Mujeres con tripulación profesional.
             </p>
             <div className="pt-6 border-t border-white/20 max-w-[120px] md:max-w-[150px]">
               <p className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] font-bold text-white">Est. 2026</p>

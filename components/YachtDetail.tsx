@@ -5,12 +5,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Cormorant_Garamond, Inter } from 'next/font/google'
 import { Bath, BedDouble, ChevronLeft, ChevronRight, Ruler, Star, Users, X } from 'lucide-react'
+import LanguageSwitch from '@/components/LanguageSwitch'
+import { useI18n } from '@/components/LocaleProvider'
+import { fill } from '@/lib/i18n'
+import { localizePath } from '@/lib/i18n/config'
 import { averageRating, type YachtReview } from '@/lib/yacht-reviews'
 import {
-  formatBaths,
-  formatGuests,
   formatLength,
-  formatRooms,
   summarizeYachtCopy,
   toSentenceCase,
   type Yacht,
@@ -89,6 +90,7 @@ export default function YachtDetail({
   reviews = [],
   bookHref,
 }: YachtDetailProps) {
+  const { dict, locale } = useI18n()
   const photos = useGalleryPhotos(images)
   const [active, setActive] = useState(0)
   const touchStartX = useRef<number | null>(null)
@@ -98,7 +100,7 @@ export default function YachtDetail({
   const highlights = (features.length > 0 ? features : includes).slice(0, 8)
   const description =
     summarizeYachtCopy(yacht.description) ||
-    `Renta el yate ${yacht.name.trim()} en Cancún con Blue Waves. Charter privado, salida desde la bahía y tripulación profesional.`
+    fill(dict.yacht.fallbackDescription, { name: yacht.name.trim() })
   const rating = averageRating(reviews)
 
   const goTo = useCallback(
@@ -155,7 +157,11 @@ export default function YachtDetail({
           >
             <Image
               src={current}
-              alt={`${yacht.name} — fotografía ${active + 1} de ${total}, renta de yate en Cancún`}
+              alt={fill(dict.yacht.photoAlt, {
+                name: yacht.name,
+                n: active + 1,
+                total,
+              })}
               fill
               preload
               loading="eager"
@@ -166,9 +172,9 @@ export default function YachtDetail({
             <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-black/25 via-transparent to-black/20 lg:from-black/35" />
 
             <Link
-              href="/#fleet"
+              href={localizePath(locale, '/#fleet')}
               className="absolute right-3 top-3 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-black/35 text-white backdrop-blur-sm lg:hidden"
-              aria-label="Cerrar ficha y volver a la flota"
+              aria-label={dict.yacht.close}
             >
               <X size={16} strokeWidth={1.5} />
             </Link>
@@ -185,7 +191,7 @@ export default function YachtDetail({
                   type="button"
                   onClick={prev}
                   className="absolute left-3 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/15 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0A192F] lg:left-6 lg:flex"
-                  aria-label="Fotografía anterior"
+                  aria-label={dict.yacht.prevPhoto}
                 >
                   <ChevronLeft size={22} strokeWidth={1.5} />
                 </button>
@@ -193,7 +199,7 @@ export default function YachtDetail({
                   type="button"
                   onClick={next}
                   className="absolute right-3 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/15 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#0A192F] lg:right-6 lg:flex"
-                  aria-label="Fotografía siguiente"
+                  aria-label={dict.yacht.nextPhoto}
                 >
                   <ChevronRight size={22} strokeWidth={1.5} />
                 </button>
@@ -213,7 +219,7 @@ export default function YachtDetail({
                       ? 'ring-2 ring-sky-300 ring-offset-1 ring-offset-black/30'
                       : 'opacity-70 hover:opacity-100'
                   }`}
-                  aria-label={`Ver fotografía ${index + 1}`}
+                  aria-label={`${dict.yacht.viewPhoto} ${index + 1}`}
                   aria-current={index === active}
                 >
                   <Image
@@ -234,17 +240,20 @@ export default function YachtDetail({
         <aside className="yacht-linen relative flex w-full flex-col lg:h-full lg:min-h-0 lg:w-[30%] lg:overflow-y-auto">
           <div className="pointer-events-none absolute inset-0 bg-[#fffcf6]/72" />
           <Link
-            href="/#fleet"
+            href={localizePath(locale, '/#fleet')}
             className="absolute right-5 top-5 z-10 hidden h-9 w-9 items-center justify-center rounded-full border border-zinc-200/80 bg-[#fffcf6]/80 text-zinc-500 transition hover:border-[#0A192F] hover:text-[#0A192F] lg:flex"
-            aria-label="Cerrar ficha y volver a la flota"
+            aria-label={dict.yacht.close}
           >
             <X size={16} strokeWidth={1.5} />
           </Link>
 
           <div className="relative z-[1] flex flex-1 flex-col px-5 pb-28 pt-6 md:px-10 lg:px-9 lg:pb-8 lg:pt-14">
-            <p className="text-[9px] font-semibold uppercase tracking-[0.42em] text-sky-600 lg:text-[10px]">
-              Renta de yate en Cancún
-            </p>
+            <div className="mb-4 flex items-center justify-between gap-4 pr-10">
+              <p className="text-[9px] font-semibold uppercase tracking-[0.42em] text-sky-600 lg:text-[10px]">
+                {dict.yacht.kicker}
+              </p>
+              <LanguageSwitch tone="dark" />
+            </div>
             <h1 className="mt-2 font-[family-name:var(--font-yacht-serif)] text-[2rem] font-light italic leading-[1.05] tracking-tight text-[#0A192F] lg:mt-3 lg:text-5xl">
               {yacht.name.trim()}
             </h1>
@@ -252,7 +261,7 @@ export default function YachtDetail({
               <p className="mt-3 flex items-center gap-2 text-[11px] tracking-[0.12em] text-zinc-500">
                 <Stars value={rating} />
                 <span className="font-semibold text-[#0A192F]">{rating.toFixed(1)}</span>
-                <span>· {reviews.length} guest {reviews.length === 1 ? 'note' : 'notes'}</span>
+                <span>· {reviews.length} {reviews.length === 1 ? dict.yacht.note : dict.yacht.notes}</span>
               </p>
             ) : null}
             <div className="mt-4 h-px w-12 bg-sky-500" />
@@ -266,23 +275,35 @@ export default function YachtDetail({
             <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-5 border-t border-zinc-200/80 pt-5 lg:mt-8 lg:gap-x-5 lg:gap-y-6 lg:pt-7">
               <SpecItem
                 icon={<Ruler size={16} strokeWidth={1.4} />}
-                label="Length"
+                label={dict.yacht.length}
                 value={formatLength(yacht.size)}
               />
               <SpecItem
                 icon={<Users size={16} strokeWidth={1.4} />}
-                label="Capacity"
-                value={formatGuests(yacht.capacity)}
+                label={dict.yacht.capacity}
+                value={
+                  yacht.capacity == null
+                    ? '—'
+                    : `${yacht.capacity} ${yacht.capacity === 1 ? dict.yacht.guest : dict.yacht.guests}`
+                }
               />
               <SpecItem
                 icon={<BedDouble size={16} strokeWidth={1.4} />}
-                label="Cabins"
-                value={formatRooms(yacht.cabins)}
+                label={dict.yacht.cabins}
+                value={
+                  yacht.cabins == null
+                    ? '—'
+                    : `${yacht.cabins} ${yacht.cabins === 1 ? dict.yacht.cabin : dict.yacht.cabinsValue}`
+                }
               />
               <SpecItem
                 icon={<Bath size={16} strokeWidth={1.4} />}
-                label="Bathrooms"
-                value={formatBaths(yacht.bathrooms)}
+                label={dict.yacht.bathrooms}
+                value={
+                  yacht.bathrooms == null
+                    ? '—'
+                    : `${yacht.bathrooms} ${yacht.bathrooms === 1 ? dict.yacht.bath : dict.yacht.baths}`
+                }
               />
             </div>
 
@@ -304,7 +325,7 @@ export default function YachtDetail({
                 href={bookHref}
                 className="flex w-full items-center justify-center bg-[#0A192F] px-6 py-5 text-[11px] font-medium uppercase tracking-[0.28em] text-white transition hover:bg-[#12324a]"
               >
-                Book this experience
+                {dict.yacht.book}
               </Link>
             </div>
           </div>
@@ -323,10 +344,10 @@ export default function YachtDetail({
       {reviews.length > 0 ? (
         <section className="border-t border-zinc-200/70 px-5 pb-28 pt-10 lg:px-12 lg:pb-14 lg:pt-12">
           <p className="text-[9px] font-semibold uppercase tracking-[0.42em] text-sky-600 lg:text-[10px]">
-            Guest notes
+            {dict.yacht.guestNotes}
           </p>
           <h2 className="mt-2 font-[family-name:var(--font-yacht-serif)] text-3xl font-light italic text-[#0A192F] lg:text-4xl">
-            A bordo del {yacht.name.trim()}
+            {dict.yacht.onboard} {yacht.name.trim()}
           </h2>
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {reviews.slice(0, 6).map((review) => (

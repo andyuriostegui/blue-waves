@@ -1,16 +1,20 @@
 'use client'
 import { motion } from "framer-motion";
 import { usePathname } from 'next/navigation';
-import { DEFAULT_WHATSAPP_MESSAGE, getWhatsAppUrl } from '@/lib/site';
+import { getDictionary } from '@/lib/i18n';
+import { getLocaleFromPathname } from '@/lib/i18n/config';
+import { getWhatsAppUrl } from '@/lib/site';
 
 export default function WhatsAppButton() {
   const pathname = usePathname();
   const isDashboardPage = pathname?.startsWith('/dashboard');
-  const isYachtPage = pathname?.startsWith('/yates');
+  const isYachtPage = pathname?.includes('/yates');
+  const locale = getLocaleFromPathname(pathname);
+  const dict = getDictionary(locale);
 
   if (isDashboardPage) return null;
 
-  const whatsappUrl = getWhatsAppUrl(DEFAULT_WHATSAPP_MESSAGE);
+  const whatsappUrl = getWhatsAppUrl(dict.whatsapp.default);
 
   return (
     <motion.a
@@ -23,9 +27,8 @@ export default function WhatsAppButton() {
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
       className={`fixed right-5 z-[999] bg-[#25D366] text-white p-4 rounded-full shadow-[0_10px_30px_rgba(37,211,102,0.4)] ${isYachtPage ? 'bottom-24 lg:bottom-6' : 'bottom-6'}`}
-      title="Chat on WhatsApp"
+      title={dict.whatsapp.title}
     >
-      {/* --- SVG OFICIAL DE WHATSAPP --- */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="28"

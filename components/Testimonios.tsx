@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useI18n } from '@/components/LocaleProvider';
 
 export default function Testimonios() {
+  const { dict } = useI18n();
   useEffect(() => {
     // Carga el CDN oficial de Elfsight de manera asíncrona
     const script = document.createElement('script');
@@ -23,10 +25,10 @@ export default function Testimonios() {
         {/* Encabezado siguiendo la línea de diseño "Beyond the Horizon" */}
         <div className="text-center mb-12 md:mb-16">
           <p className="text-xs uppercase tracking-[0.2em] text-[#0A192F] font-semibold mb-3">
-            Opiniones de nuestros clientes
+            {dict.testimonials.kicker}
           </p>
           <h2 className="text-3xl md:text-5xl font-serif text-[#0A192F] italic tracking-tight">
-            Experiencias en el mar.
+            {dict.testimonials.title}
           </h2>
           <div className="w-12 h-[1px] bg-[#0A192F]/30 mx-auto mt-6"></div>
         </div>

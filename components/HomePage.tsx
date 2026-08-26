@@ -11,6 +11,8 @@ import Toys from '@/components/Toys'
 import ContactForm from '@/components/ContactForm'
 import WaveDivider from '@/components/WaveDivider'
 import SeoFaq from '@/components/SeoFaq'
+import LanguageSwitch from '@/components/LanguageSwitch'
+import { useI18n } from '@/components/LocaleProvider'
 import {
   SITE_FACEBOOK,
   SITE_INSTAGRAM,
@@ -30,6 +32,7 @@ const sans = Inter({
 })
 
 export default function HomePage({ yachts }: { yachts: Yacht[] }) {
+  const { dict } = useI18n()
   const [preselectedYacht, setPreselectedYacht] = useState('')
 
   const scrollToContact = (yachtName?: string) => {
@@ -68,11 +71,13 @@ export default function HomePage({ yachts }: { yachts: Yacht[] }) {
       <footer className="py-24 text-center bg-white border-t border-zinc-100">
         <p className="font-serif text-4xl italic mb-3 text-[#0A192F]">Blue Waves</p>
         <p className="mb-8 text-[10px] font-semibold uppercase tracking-[0.28em] text-zinc-400">
-          Renta de yates de lujo en Cancún
+          {dict.footer.tagline}
         </p>
         <p className="mb-10 text-[11px] font-light text-zinc-500">{SITE_LOCATION}</p>
 
-        <nav aria-label="Redes sociales" className="mb-10">
+        <LanguageSwitch tone="dark" className="mb-10 flex justify-center" />
+
+        <nav aria-label={dict.footer.social} className="mb-10">
           <ul className="flex justify-center items-start gap-2 sm:gap-4">
             <li>
               <SocialLink href={SITE_INSTAGRAM} label="Instagram">
@@ -90,7 +95,7 @@ export default function HomePage({ yachts }: { yachts: Yacht[] }) {
         <div className="max-w-xs mx-auto mb-8 h-[1px] bg-zinc-100"></div>
 
         <p className="text-[9px] tracking-[0.6em] uppercase text-zinc-300">
-          © 2026 Blue Waves Maritime Group • Excellence in Yachting
+          {dict.footer.copyright}
         </p>
       </footer>
     </div>

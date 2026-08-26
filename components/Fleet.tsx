@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Ruler, Users, Wind, Anchor, Maximize2, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { useI18n } from "@/components/LocaleProvider";
+import { localizePath } from "@/lib/i18n/config";
 import { getYachtSlug, type Yacht } from "@/lib/yachts";
 
 export default function Fleet({
@@ -15,6 +17,7 @@ export default function Fleet({
   yachts: Yacht[]
   loading: boolean
 }) {
+  const { dict, locale } = useI18n();
   const [selectedYacht, setSelectedYacht] = useState<Yacht | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -103,7 +106,7 @@ export default function Fleet({
     return (
       <div className="py-40 text-center bg-[#0A192F] text-white flex flex-col items-center gap-4">
         <Loader2 className="animate-spin text-blue-500" size={40} />
-        <p className="font-serif italic text-xl tracking-widest">Cargando la flota...</p>
+        <p className="font-serif italic text-xl tracking-widest">{dict.fleet.loading}</p>
       </div>
     );
   }
@@ -115,9 +118,9 @@ export default function Fleet({
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
           className="text-[10px] tracking-[0.8em] uppercase text-blue-500 font-black mb-4 block"
         >
-          Yates en renta en Cancún
+          {dict.fleet.kicker}
         </motion.span>
-        <h2 className="font-serif text-5xl md:text-8xl italic font-light mb-12 md:mb-20">The Collection</h2>
+        <h2 className="font-serif text-5xl md:text-8xl italic font-light mb-12 md:mb-20">{dict.fleet.title}</h2>
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-12">
           {yachts.map((yacht) => (
@@ -141,18 +144,18 @@ export default function Fleet({
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F] via-transparent to-transparent opacity-70 md:opacity-50 md:group-hover:opacity-80 transition-opacity duration-500" />
                 <div className="absolute inset-x-0 bottom-0 flex justify-center px-3 pb-3 md:px-6 md:pb-8">
                   <Link
-                    href={`/yates/${getYachtSlug(yacht)}`}
+                    href={localizePath(locale, `/yates/${getYachtSlug(yacht)}`)}
                     onClick={(e) => e.stopPropagation()}
                     className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-4 py-2 text-[8px] font-medium uppercase tracking-[0.28em] text-white backdrop-blur-md transition duration-500 hover:border-white hover:bg-white hover:text-[#0A192F] md:translate-y-3 md:px-6 md:py-2.5 md:text-[9px] md:tracking-[0.32em] md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100"
                   >
-                    Ver yate
+                    {dict.fleet.viewYacht}
                     <span className="text-[11px] leading-none md:text-xs">→</span>
                   </Link>
                 </div>
               </div>
               <h3 className="font-serif text-lg md:text-3xl font-light tracking-tight group-hover:text-blue-400 transition-colors truncate px-1">
                 <Link
-                  href={`/yates/${getYachtSlug(yacht)}`}
+                  href={localizePath(locale, `/yates/${getYachtSlug(yacht)}`)}
                   onClick={(e) => e.stopPropagation()}
                   className="hover:underline decoration-1 underline-offset-4"
                 >
@@ -160,7 +163,7 @@ export default function Fleet({
                 </Link>
               </h3>
               <p className="text-[8px] md:text-[10px] tracking-[0.2em] md:tracking-[0.4em] uppercase text-zinc-500 font-bold mt-1 md:mt-2 px-1">
-                {yacht.size} • Charter en Cancún
+                {yacht.size} • {dict.fleet.charterIn}
               </p>
             </motion.div>
           ))}
@@ -276,7 +279,7 @@ export default function Fleet({
               >
                 <div className="space-y-6 md:space-y-8">
                   <div>
-                    <span className="text-[9px] md:text-[10px] tracking-[0.5em] text-blue-600 uppercase font-black">Vessel Specifications</span>
+                    <span className="text-[9px] md:text-[10px] tracking-[0.5em] text-blue-600 uppercase font-black">{dict.fleet.specs}</span>
                     <h2 className="font-serif text-3xl md:text-5xl italic text-[#0A192F] mt-2 mb-4 md:mb-6 leading-tight">{selectedYacht.name}</h2>
                     <div className="h-1 w-12 bg-blue-600 mb-6 md:mb-8" />
                   </div>
@@ -286,26 +289,38 @@ export default function Fleet({
                     </p>
                   </div>
                   <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:gap-x-6 md:gap-y-10 border-t border-zinc-100 pt-6 md:pt-10">
-                    <SpecItem label="Length" value={selectedYacht.size ?? '—'} icon={<Ruler size={16} />} />
-                    <SpecItem label="Capacity" value={`${selectedYacht.capacity} Guests`} icon={<Users size={16} />} />
-                    <SpecItem label="Cabins" value={`${selectedYacht.cabins} Rooms`} icon={<Wind size={16} />} />
-                    <SpecItem label="Bathrooms" value={`${selectedYacht.bathrooms} WC`} icon={<Anchor size={16} />} />
+                    <SpecItem label={dict.fleet.length} value={selectedYacht.size ?? '—'} icon={<Ruler size={16} />} />
+                    <SpecItem
+                      label={dict.fleet.capacity}
+                      value={`${selectedYacht.capacity ?? '—'} ${selectedYacht.capacity === 1 ? dict.fleet.guest : dict.fleet.guests}`}
+                      icon={<Users size={16} />}
+                    />
+                    <SpecItem
+                      label={dict.fleet.cabins}
+                      value={`${selectedYacht.cabins ?? '—'} ${selectedYacht.cabins === 1 ? dict.fleet.cabin : dict.fleet.cabinsValue}`}
+                      icon={<Wind size={16} />}
+                    />
+                    <SpecItem
+                      label={dict.fleet.bathrooms}
+                      value={`${selectedYacht.bathrooms ?? '—'}`}
+                      icon={<Anchor size={16} />}
+                    />
                   </div>
                 </div>
 
                 <div className="mt-8 md:mt-12 space-y-3">
                   <Link
-                    href={`/yates/${getYachtSlug(selectedYacht)}`}
+                    href={localizePath(locale, `/yates/${getYachtSlug(selectedYacht)}`)}
                     className="w-full border border-[#0A192F] text-[#0A192F] py-4 text-[10px] md:text-[11px] font-bold tracking-[0.4em] uppercase hover:bg-[#0A192F] hover:text-white transition-all flex items-center justify-center"
                   >
-                    Ver ficha completa
+                    {dict.fleet.viewFull}
                   </Link>
                   <button
                     type="button"
                     onClick={() => { closeModal(); scrollToContact(selectedYacht.name); }}
                     className="w-full bg-[#0A192F] text-white py-5 md:py-6 text-[10px] md:text-[11px] font-bold tracking-[0.4em] uppercase hover:bg-blue-600 transition-all shadow-2xl flex items-center justify-center gap-4 group"
                   >
-                    Book This Experience
+                    {dict.fleet.book}
                     <motion.span animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>
                   </button>
                 </div>

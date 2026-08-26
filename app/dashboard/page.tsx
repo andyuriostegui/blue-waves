@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { getYachtSlug } from '@/lib/yachts'
@@ -14,10 +15,11 @@ import {
 import imageCompression from 'browser-image-compression'
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
 
+import ExperienciasCrmPanel from '@/components/ExperienciasCrmPanel'
 import {
   Anchor, LayoutDashboard, Users, Search, Plus, LogOut, ShieldCheck,
-  Loader2, Trash2, X, ImageIcon, Edit3, Eye, Coffee, Waves,
-  Mail, Phone, MessageSquare, CheckCircle2, Clock, Ship
+  Loader2, Trash2, X, ImageIcon, Edit3, Eye, Images,
+  MessageSquare, CheckCircle2, Clock, Ship
 } from 'lucide-react'
 
 const neuOut = 'bg-[#e0e5ec] shadow-[7px_7px_14px_#bebebe,-7px_-7px_14px_#ffffff]'
@@ -60,7 +62,8 @@ export default function DashboardPage() {
       if (!user) { router.push('/auth'); return }
       
       const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-      setUserRole(profile?.role || 'vendedor')
+      const rawRole = String(profile?.role ?? '').trim().toLowerCase()
+      setUserRole(rawRole || 'vendedor')
       
       const { data: yData } = await supabase.from('yachts').select('*').order('created_at', { ascending: false })
       const { data: lData } = await supabase.from('leads').select('*').order('created_at', { ascending: false })
@@ -186,6 +189,8 @@ export default function DashboardPage() {
     setYachtReviews([])
   }
   const handleLogout = async () => { await supabase.auth.signOut(); router.push('/auth') }
+  const isAdmin = ['admin', 'administrador', 'owner'].includes((userRole || '').toLowerCase())
+  const canEditExperiencias = Boolean(userRole)
 
   if (loading) return <div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center"><Loader2 className="animate-spin text-blue-600" size={40} /></div>
 
@@ -194,14 +199,23 @@ export default function DashboardPage() {
       
       <aside className={`md:w-24 w-full h-auto md:h-screen ${neuOut} flex md:flex-col flex-row items-center py-4 md:py-10 px-6 md:px-0 justify-between sticky top-0 z-50`}>
         <div className="font-bold text-xl text-[#1e3a8a] italic">BW</div>
-        <nav className="flex md:flex-col flex-row gap-4 md:gap-8">
+        <nav className="flex md:flex-col flex-row flex-wrap justify-center gap-3 md:gap-8">
           {[
-            { id: 'Dashboard', icon: <LayoutDashboard size={22} /> }, 
-            { id: 'Flota', icon: <Anchor size={22} /> }, 
-            { id: 'Leads', icon: <Users size={22} /> }
+            { id: 'Dashboard', icon: <LayoutDashboard size={22} /> },
+            { id: 'Flota', icon: <Anchor size={22} /> },
+            { id: 'Leads', icon: <Users size={22} /> },
+            { id: 'Experiencias', icon: <Images size={22} /> },
           ].map((item) => (
-            <button key={item.id} onClick={() => setActiveTab(item.id)} className={`p-3 md:p-5 rounded-2xl transition-all ${activeTab === item.id ? neuIn + ' text-[#2563eb]' : 'text-[#94a3b8]'}`}>
+            <button
+              key={item.id}
+              type="button"
+              title={item.id}
+              aria-label={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`p-3 md:p-5 rounded-2xl transition-all flex flex-col items-center gap-1 ${activeTab === item.id ? neuIn + ' text-[#2563eb]' : 'text-[#94a3b8]'}`}
+            >
               {item.icon}
+              <span className="text-[7px] font-black uppercase tracking-wider md:text-[8px]">{item.id}</span>
             </button>
           ))}
         </nav>
@@ -226,10 +240,19 @@ export default function DashboardPage() {
               <p className="text-[10px] uppercase tracking-[0.4em] text-[#94a3b8] font-bold">Consola de Mando</p>
               <h1 className="text-3xl font-light text-[#1e3a8a]">Sección <span className="font-bold">{activeTab}</span></h1>
             </div>
-            {userRole === 'admin' && activeTab === 'Flota' && (
+            {isAdmin && activeTab === 'Flota' && (
               <button onClick={() => setIsModalOpen(true)} className={`flex items-center gap-2 px-6 py-3 rounded-2xl ${neuBtn} text-[#2563eb] text-xs font-bold uppercase`}>
                 <Plus size={16} /> New Yacht
               </button>
+            )}
+            {activeTab === 'Experiencias' && (
+              <Link
+                href="/experiencias"
+                target="_blank"
+                className={`flex items-center gap-2 px-6 py-3 rounded-2xl ${neuBtn} text-[#2563eb] text-xs font-bold uppercase`}
+              >
+                Ver página
+              </Link>
             )}
           </div>
 
@@ -257,6 +280,20 @@ export default function DashboardPage() {
                     <div className={`h-1.5 w-10 rounded-full ${card.color} opacity-20`} />
                   </div>
                 ))}
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('Experiencias')}
+                  className={`p-6 rounded-[35px] ${neuOut} flex flex-col items-center text-center space-y-4 md:col-span-2 lg:col-span-4`}
+                >
+                  <div className={`p-4 rounded-2xl ${neuIn} flex items-center justify-center text-sky-600`}>
+                    <Images size={22} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Fotos de Experiencias</p>
+                    <h3 className="text-xl font-bold text-[#1e3a8a] mt-1">Subir o quitar fotos de la web</h3>
+                    <p className="text-xs text-zinc-500 mt-2">Abre la galería de /experiencias para publicar o borrar imágenes.</p>
+                  </div>
+                </button>
               </motion.div>
             )}
 
@@ -283,6 +320,12 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 ))}
+              </motion.div>
+            )}
+
+            {activeTab === 'Experiencias' && (
+              <motion.div key="experiencias" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <ExperienciasCrmPanel isAdmin={canEditExperiencias} />
               </motion.div>
             )}
 
@@ -485,7 +528,7 @@ export default function DashboardPage() {
 
                 <div className="flex gap-5 mt-6 pt-6 border-t border-gray-300/30">
                   {isDetailMode ? (
-                    userRole === 'admin' && <button type="button" onClick={() => setIsDetailMode(false)} className={`w-full py-4 rounded-2xl ${neuBtn} text-[#1e3a8a] font-black uppercase text-xs tracking-widest`}><Edit3 size={15} className="inline mr-2" /> MODIFICAR INFO</button>
+                    isAdmin && <button type="button" onClick={() => setIsDetailMode(false)} className={`w-full py-4 rounded-2xl ${neuBtn} text-[#1e3a8a] font-black uppercase text-xs tracking-widest`}><Edit3 size={15} className="inline mr-2" /> MODIFICAR INFO</button>
                   ) : (
                     <>
                       <button type="button" onClick={() => setIsDetailMode(true)} className={`w-1/2 py-4 rounded-2xl ${neuBtn} text-zinc-500 font-bold uppercase text-xs`}>DESCARTAR</button>

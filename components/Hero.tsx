@@ -1,16 +1,22 @@
 'use client'
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Anchor, X } from "lucide-react"; // Importamos el ancla y la X
+import { Anchor, X } from "lucide-react";
+import LanguageSwitch from "@/components/LanguageSwitch";
+import { useI18n } from "@/components/LocaleProvider";
+import { localizePath } from "@/lib/i18n/config";
 
 export default function Hero({ scrollToContact }: { scrollToContact: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { dict, locale } = useI18n();
 
   const navLinks = [
-    { name: "Fleet", href: "#fleet" },
-    { name: "About Us", href: "#about" },
-    { name: "Journey", href: "#journey" },
+    { name: dict.nav.fleet, href: "#fleet" },
+    { name: dict.nav.about, href: "#about" },
+    { name: dict.nav.journey, href: "#journey" },
+    { name: dict.nav.experiences, href: localizePath(locale, "/experiencias") },
   ];
 
   const closeMenu = () => setIsOpen(false);
@@ -19,39 +25,36 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
     <section className="relative h-screen w-full overflow-hidden bg-[#0B2A30]">
       <Image 
         src="/bluebueno.png" 
-        alt="Yate de lujo en Cancún — renta de charter privado Blue Waves"
+        alt={dict.hero.imageAlt}
         fill 
         className="object-cover opacity-80 scale-110 md:scale-105"
         priority 
       />
       
-      {/* Capas de fondo */}
       <div className="absolute inset-0 bg-[#0B2A30]/20 z-[1]" />
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#0B2A30] to-transparent z-[2]" />      
       
-      {/* NAV RESPONSIVE */}
       <nav className="absolute top-0 w-full flex justify-between items-center p-6 md:p-10 z-[50]">
         <span className="text-white tracking-[0.3em] md:tracking-[0.5em] uppercase text-[9px] md:text-[10px] font-bold">
           Blue Waves
         </span>
         
         <div className="flex items-center gap-4 md:gap-8">
-          {/* Desktop Links */}
           <div className="hidden md:flex gap-8 text-white/70 text-[10px] tracking-widest uppercase font-medium">
             {navLinks.map((link) => (
-              <a key={link.name} href={link.href} className="hover:text-white transition">{link.name}</a>
+              <NavItem key={link.name} href={link.href}>{link.name}</NavItem>
             ))}
           </div>
 
-          {/* Botón Book Now */}
+          <LanguageSwitch className="hidden md:block" />
+
           <button 
             onClick={scrollToContact} 
             className="bg-white text-black px-5 py-2 md:px-6 md:py-2 rounded-full text-[8px] md:text-[9px] font-bold tracking-widest hover:bg-zinc-200 transition shadow-lg"
           >
-            BOOK NOW
+            {dict.nav.book}
           </button>
 
-          {/* MENÚ HAMBURGUESA / ANCLA (Móvil) */}
           <button 
             onClick={() => setIsOpen(true)}
             className="md:hidden text-white p-2 border border-white/20 rounded-full bg-white/10 backdrop-blur-md"
@@ -61,7 +64,6 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
         </div>
       </nav>
 
-      {/* MOBILE MENU OVERLAY */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -84,16 +86,16 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
               </button>
 
               <div className="flex flex-col gap-12">
-                <span className="text-[8px] tracking-[0.5em] uppercase text-white/30 font-bold">Navigation</span>
+                <span className="text-[8px] tracking-[0.5em] uppercase text-white/30 font-bold">{dict.nav.menu}</span>
                 {navLinks.map((link) => (
-                  <a 
-                    key={link.name} 
-                    href={link.href} 
+                  <NavItem
+                    key={link.name}
+                    href={link.href}
                     onClick={closeMenu}
                     className="text-white font-serif italic text-4xl hover:text-blue-400 transition-colors"
                   >
                     {link.name}
-                  </a>
+                  </NavItem>
                 ))}
                 
                 <div className="mt-10 pt-10 border-t border-white/10">
@@ -101,10 +103,12 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
                     onClick={() => { closeMenu(); scrollToContact(); }}
                     className="w-full bg-white text-black py-4 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-xl"
                   >
-                    Reservar Ahora
+                    {dict.nav.book}
                   </button>
                 </div>
               </div>
+
+              <LanguageSwitch className="mt-10" />
 
               <div className="mt-auto">
                  <Anchor size={40} strokeWidth={0.5} className="text-white/10 mx-auto" />
@@ -114,7 +118,6 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
         )}
       </AnimatePresence>
 
-     {/* CONTENIDO CENTRAL */}
       <div className="relative z-[10] flex flex-col items-center justify-center h-full text-center px-4">
         <motion.p 
           initial={{ opacity: 0, y: 30 }} 
@@ -124,7 +127,7 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
           Blue Waves
         </motion.p>
         <h1 className="mt-6 text-white/70 tracking-[0.25em] md:tracking-[0.45em] uppercase text-[8px] md:text-[10px] font-medium">
-          Renta de yates de lujo en Cancún
+          {dict.hero.h1}
         </h1>
         <motion.a
           href="#fleet"
@@ -133,9 +136,37 @@ export default function Hero({ scrollToContact }: { scrollToContact: () => void 
           transition={{ delay: 0.35, duration: 0.5 }}
           className="mt-10 inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-[9px] md:text-[10px] font-bold uppercase tracking-[0.28em] text-[#0A192F] shadow-lg transition hover:bg-zinc-200"
         >
-          Ver flota
+          {dict.hero.seeFleet}
         </motion.a>
       </div>
     </section>
   );
+}
+
+function NavItem({
+  href,
+  className,
+  onClick,
+  children,
+}: {
+  href: string
+  className?: string
+  onClick?: () => void
+  children: ReactNode
+}) {
+  const classes = className ?? 'hover:text-white transition'
+
+  if (href.startsWith('/')) {
+    return (
+      <Link href={href} onClick={onClick} className={classes}>
+        {children}
+      </Link>
+    )
+  }
+
+  return (
+    <a href={href} onClick={onClick} className={classes}>
+      {children}
+    </a>
+  )
 }

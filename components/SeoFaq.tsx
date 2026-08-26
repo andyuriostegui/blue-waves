@@ -1,22 +1,26 @@
+'use client'
+
 import { Plus } from 'lucide-react'
-import { SITE_FAQS } from '@/lib/faq'
+import { useI18n } from '@/components/LocaleProvider'
 
 export default function SeoFaq() {
+  const { dict } = useI18n()
+
   return (
     <section id="faq" className="w-full bg-white px-4 py-16 sm:px-6 md:py-20 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <div className="mb-8 text-center md:mb-10">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#0A192F]">
-            Preguntas frecuentes
+            {dict.faq.kicker}
           </p>
           <h2 className="font-serif text-3xl italic tracking-tight text-[#0A192F] md:text-5xl">
-            Renta de yates en Cancún
+            {dict.faq.title}
           </h2>
           <div className="mx-auto mt-6 h-px w-12 bg-[#0A192F]/30" />
         </div>
 
         <div className="border-t border-zinc-200">
-          {SITE_FAQS.map((item) => (
+          {dict.faq.items.map((item) => (
             <details
               key={item.question}
               name="faq"

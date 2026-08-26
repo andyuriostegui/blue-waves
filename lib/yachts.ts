@@ -107,16 +107,15 @@ export function formatBaths(bathrooms?: number | null): string {
   return `${bathrooms} WC`
 }
 
-export function yachtMetaDescription(yacht: Yacht): string {
+export function yachtMetaDescription(
+  yacht: Yacht,
+  fallback: (name: string) => string,
+  useDatabaseCopy = true,
+): string {
   const fromDb = yacht.description?.replace(/\s+/g, ' ').trim()
-  if (fromDb && fromDb.length >= 70) {
+  if (useDatabaseCopy && fromDb && fromDb.length >= 70) {
     return fromDb.length > 160 ? `${fromDb.slice(0, 157).trimEnd()}...` : fromDb
   }
 
-  const size = yacht.size ? ` de ${yacht.size}` : ''
-  const capacity = yacht.capacity
-    ? ` para hasta ${yacht.capacity} huéspedes`
-    : ''
-
-  return `Renta el yate ${yacht.name}${size}${capacity} en Cancún con Blue Waves. Charter privado, tripulación profesional y salida desde la bahía.`
+  return fallback(yacht.name.trim())
 }

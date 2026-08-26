@@ -2,14 +2,16 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Zap, Anchor, Star, ArrowRight } from "lucide-react";
+import { useI18n } from "@/components/LocaleProvider";
 
 export default function Toys() {
-  // Datos de los juguetes
-  const toys = [
-    { name: "Jet Ski Sea-Doo", desc: "Potencia y adrenalina para explorar la costa.", icon: <Zap size={18} /> },
-    { name: "Seabob F5S", desc: "Exploración submarina de lujo con tecnología alemana.", icon: <Anchor size={18} /> },
-    { name: "Custom Experience", desc: "Flyboards, E-foils y más bajo solicitud previa.", icon: <Star size={18} /> },
+  const { dict } = useI18n();
+  const icons = [
+    <Zap key="jet" size={18} />,
+    <Anchor key="seabob" size={18} />,
+    <Star key="custom" size={18} />,
   ];
+  const toys = dict.toys.items.map((item, i) => ({ ...item, icon: icons[i] }));
 
   // Función para scroll suave al contacto
   const scrollToContact = () => {
@@ -34,7 +36,7 @@ export default function Toys() {
           >
             <Image 
               src="/jetski.png" 
-              alt="Jet ski y water toys para complementar la renta de yate en Cancún" 
+              alt={dict.toys.imageAlt} 
               fill 
               className="object-cover transition-transform duration-1000 group-hover:scale-110"
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -45,8 +47,8 @@ export default function Toys() {
             
             {/* Badge de disponibilidad */}
             <div className="absolute bottom-6 left-6 right-6 md:right-auto bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl text-white">
-              <p className="text-[8px] md:text-[10px] uppercase tracking-widest font-bold">Available on demand</p>
-              <p className="font-serif italic text-base md:text-lg text-white/90">Personalize your charter</p>
+              <p className="text-[8px] md:text-[10px] uppercase tracking-widest font-bold">{dict.toys.onDemand}</p>
+              <p className="font-serif italic text-base md:text-lg text-white/90">{dict.toys.personalize}</p>
             </div>
           </motion.div>
 
@@ -54,18 +56,18 @@ export default function Toys() {
           <div className="space-y-8 md:space-y-10">
             <header className="space-y-3 md:space-y-4">
               <span className="text-[9px] md:text-[10px] tracking-[0.5em] md:tracking-[0.6em] uppercase text-blue-600 font-black">
-                Adrenaline & Luxury
+                {dict.toys.kicker}
               </span>
               <h2 className="font-serif text-4xl md:text-6xl italic leading-[1.1] text-[#0A192F]">
-                Beyond the <br className="hidden md:block" /> Horizon.
+                {dict.toys.titleBefore} <br className="hidden md:block" /> {dict.toys.titleAfter}
               </h2>
             </header>
 
             <p className="text-zinc-500 font-light text-base md:text-lg leading-relaxed max-w-md">
-              Complementen su viaje con nuestra selección curada de <span className="text-[#0A192F] font-medium italic">Water Toys</span>. Desde la velocidad de los Jetskis hasta la exploración silenciosa.
+              {dict.toys.bodyBefore}
               <br className="hidden md:block" />
               <span className="text-xs font-semibold text-[#0A192F]/70 italic block mt-4">
-                * Consulta disponibilidad y precios al realizar tu reservación.
+                {dict.toys.note}
               </span>
             </p>
 
@@ -105,7 +107,7 @@ export default function Toys() {
               >
                 <div className="relative">
                   <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] relative z-10">
-                    Solicitar Experiencias
+                    {dict.toys.cta}
                   </span>
                   <div className="absolute bottom-0 left-0 w-full h-[1px] bg-[#0A192F] origin-left group-hover:scale-x-110 transition-transform duration-500" />
                 </div>

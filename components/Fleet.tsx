@@ -116,7 +116,7 @@ export default function Fleet({
       <div className="max-w-7xl mx-auto px-4 md:px-6 text-center">
         <motion.span
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-          className="text-[10px] tracking-[0.8em] uppercase text-blue-500 font-black mb-4 block"
+          className="text-[10px] tracking-[0.28em] uppercase text-blue-500 font-black mb-4 block md:tracking-[0.8em]"
         >
           {dict.fleet.kicker}
         </motion.span>
@@ -162,7 +162,7 @@ export default function Fleet({
                   {yacht.name}
                 </Link>
               </h3>
-              <p className="text-[8px] md:text-[10px] tracking-[0.2em] md:tracking-[0.4em] uppercase text-zinc-500 font-bold mt-1 md:mt-2 px-1">
+              <p className="mt-1 truncate px-1 text-[8px] font-bold uppercase tracking-[0.12em] text-zinc-500 md:mt-2 md:text-[10px] md:tracking-[0.4em]">
                 {yacht.size} • {dict.fleet.charterIn}
               </p>
             </motion.div>

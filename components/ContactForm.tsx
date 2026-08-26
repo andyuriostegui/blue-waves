@@ -151,7 +151,7 @@ export default function ContactForm({
 
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-16 md:mb-24">
-          <span className="text-[8px] md:text-[9px] tracking-[0.6em] md:tracking-[0.8em] uppercase text-zinc-400 font-bold mb-3 md:mb-4 block">{dict.contact.kicker}</span>
+          <span className="mb-3 block text-[8px] font-bold uppercase tracking-[0.28em] text-zinc-400 md:mb-4 md:text-[9px] md:tracking-[0.8em]">{dict.contact.kicker}</span>
           <h2 className="font-serif text-4xl md:text-7xl italic text-[#0A192F] leading-tight px-4">{dict.contact.title}</h2>
           <p className="mt-4 text-sm font-light text-zinc-500 px-4">
             {dict.contact.body}

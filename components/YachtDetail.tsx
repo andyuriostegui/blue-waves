@@ -248,8 +248,8 @@ export default function YachtDetail({
           </Link>
 
           <div className="relative z-[1] flex flex-1 flex-col px-5 pb-28 pt-6 md:px-10 lg:px-9 lg:pb-8 lg:pt-14">
-            <div className="mb-4 flex items-center justify-between gap-4 pr-10">
-              <p className="text-[9px] font-semibold uppercase tracking-[0.42em] text-sky-600 lg:text-[10px]">
+            <div className="mb-4 flex items-center justify-between gap-3 lg:pr-10">
+              <p className="min-w-0 text-[9px] font-semibold uppercase tracking-[0.28em] text-sky-600 sm:tracking-[0.42em] lg:text-[10px]">
                 {dict.yacht.kicker}
               </p>
               <LanguageSwitch tone="dark" />
@@ -335,7 +335,7 @@ export default function YachtDetail({
               href={bookHref}
               className="flex w-full items-center justify-center bg-[#0A192F] px-6 py-4 text-[11px] font-medium uppercase tracking-[0.28em] text-white"
             >
-              Book this experience
+              {dict.yacht.book}
             </Link>
           </div>
         </aside>

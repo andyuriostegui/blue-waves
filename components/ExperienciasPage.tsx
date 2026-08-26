@@ -94,7 +94,7 @@ export default function ExperienciasPage({
 
   return (
     <div
-      className={`${serif.variable} ${sans.variable} min-h-screen bg-[#F4F4F4] font-[family-name:var(--font-exp-sans)] text-[#0A192F] antialiased`}
+      className={`${serif.variable} ${sans.variable} min-h-screen overflow-x-hidden bg-[#F4F4F4] font-[family-name:var(--font-exp-sans)] text-[#0A192F] antialiased`}
     >
       <SiteNav scrolled={scrolled} />
 
@@ -107,7 +107,7 @@ export default function ExperienciasPage({
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[9px] font-semibold uppercase tracking-[0.48em] text-white/70 md:text-[10px]"
+            className="text-[9px] font-semibold uppercase tracking-[0.28em] text-white/70 md:text-[10px] md:tracking-[0.48em]"
           >
             {dict.experiencias.heroKicker}
           </motion.p>
@@ -115,11 +115,11 @@ export default function ExperienciasPage({
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12 }}
-            className="mt-5 font-[family-name:var(--font-exp-serif)] text-[16vw] font-light italic leading-[0.9] text-white drop-shadow-2xl md:text-[8.5vw]"
+            className="mt-5 max-w-[12ch] font-[family-name:var(--font-exp-serif)] text-[2.55rem] font-light italic leading-[0.95] text-white drop-shadow-2xl sm:max-w-none sm:text-6xl md:text-[8.5vw]"
           >
             {dict.experiencias.heroTitle}
           </motion.p>
-          <h1 className="mt-6 text-[8px] font-medium uppercase tracking-[0.28em] text-white/75 md:text-[10px] md:tracking-[0.42em]">
+          <h1 className="mt-6 max-w-[16rem] text-[8px] font-medium uppercase tracking-[0.16em] text-white/75 sm:max-w-none md:text-[10px] md:tracking-[0.42em]">
             {dict.experiencias.heroH1}
           </h1>
           <motion.a
@@ -285,7 +285,7 @@ function SiteNav({ scrolled }: { scrolled: boolean }) {
 
   return (
     <nav
-      className={`fixed top-0 z-50 flex w-full items-center justify-between px-6 py-5 transition-all duration-500 md:px-10 md:py-6 ${
+      className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-2 px-3 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] transition-all duration-500 sm:px-5 md:gap-8 md:px-10 md:py-6 ${
         scrolled
           ? 'bg-[#fffcf6]/92 text-[#0A192F] shadow-[0_8px_30px_rgba(10,25,47,0.06)] backdrop-blur-md'
           : 'bg-transparent text-white'
@@ -293,11 +293,11 @@ function SiteNav({ scrolled }: { scrolled: boolean }) {
     >
       <Link
         href={home}
-        className="text-[9px] font-bold uppercase tracking-[0.3em] md:text-[10px] md:tracking-[0.5em]"
+        className="min-w-0 truncate text-[9px] font-bold uppercase tracking-[0.18em] md:text-[10px] md:tracking-[0.5em]"
       >
         Blue Waves
       </Link>
-      <div className="flex items-center gap-4 md:gap-8">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-3 md:gap-8">
         <div
           className={`hidden gap-8 text-[10px] font-medium uppercase tracking-widest md:flex ${
             scrolled ? 'text-[#0A192F]/70' : 'text-white/70'
@@ -315,16 +315,8 @@ function SiteNav({ scrolled }: { scrolled: boolean }) {
         </div>
         <LanguageSwitch tone={scrolled ? 'dark' : 'light'} />
         <Link
-          href={fleet}
-          className={`text-[8px] font-semibold uppercase tracking-[0.22em] md:hidden ${
-            scrolled ? 'text-[#0A192F]/70' : 'text-white/70'
-          }`}
-        >
-          {dict.nav.fleet}
-        </Link>
-        <Link
           href={contact}
-          className={`rounded-full px-5 py-2 text-[8px] font-bold tracking-widest transition md:px-6 md:text-[9px] ${
+          className={`shrink-0 rounded-full px-3 py-2 text-[8px] font-bold tracking-widest transition sm:px-5 md:px-6 md:text-[9px] ${
             scrolled
               ? 'bg-[#0A192F] text-white hover:bg-[#0A192F]/90'
               : 'bg-white text-black hover:bg-zinc-200'

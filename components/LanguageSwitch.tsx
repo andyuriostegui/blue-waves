@@ -6,6 +6,62 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { LOCALES, switchLocalePath, type Locale } from '@/lib/i18n/config'
 import { useI18n } from '@/components/LocaleProvider'
 
+function switchClasses(tone: 'light' | 'dark') {
+  const light = {
+    muted: 'text-white hover:bg-white/15',
+    active: 'bg-white text-[#0A192F]',
+    shell: 'border-white/40 bg-white/20 backdrop-blur-sm',
+  }
+  const dark = {
+    muted: 'text-zinc-500 hover:text-[#0A192F]',
+    active: 'bg-[#0A192F] text-white',
+    shell: 'border-zinc-300 bg-white',
+  }
+  return tone === 'light' ? light : dark
+}
+
+function LocaleOptions({
+  locale,
+  tone,
+  hrefFor,
+}: {
+  locale: Locale
+  tone: 'light' | 'dark'
+  hrefFor?: (item: Locale) => string
+}) {
+  const colors = switchClasses(tone)
+  const itemClass =
+    'inline-flex h-7 w-8 items-center justify-center rounded-full text-[9px] font-bold uppercase tracking-[0.14em] transition sm:h-8 sm:w-9 sm:text-[10px]'
+
+  return (
+    <ul className={`flex items-center rounded-full border p-0.5 ${colors.shell}`}>
+      {LOCALES.map((item) => {
+        const isActive = item === locale
+        const label = item.toUpperCase()
+        const classes = `${itemClass} ${isActive ? colors.active : colors.muted}`
+
+        return (
+          <li key={item}>
+            {hrefFor ? (
+              <Link
+                href={hrefFor(item)}
+                hrefLang={item === 'es' ? 'es-MX' : 'en'}
+                lang={item === 'es' ? 'es-MX' : 'en'}
+                className={classes}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                {label}
+              </Link>
+            ) : (
+              <span className={classes}>{label}</span>
+            )}
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
 function LanguageSwitchInner({
   className,
   tone = 'light',
@@ -19,36 +75,13 @@ function LanguageSwitchInner({
   const query = searchParams.toString()
   const suffix = query ? `?${query}` : ''
 
-  const muted = tone === 'light' ? 'text-white/45 hover:text-white' : 'text-zinc-400 hover:text-[#0A192F]'
-  const active = tone === 'light' ? 'text-white' : 'text-[#0A192F]'
-  const divider = tone === 'light' ? 'text-white/25' : 'text-zinc-300'
-
   return (
-    <nav aria-label={dict.nav.language} className={className}>
-      <ul className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.28em]">
-        {LOCALES.map((item, index) => {
-          const href = `${switchLocalePath(pathname, item)}${suffix}`
-          const isActive = item === locale
-          return (
-            <li key={item} className="flex items-center gap-2">
-              {index > 0 ? (
-                <span aria-hidden className={divider}>
-                  ·
-                </span>
-              ) : null}
-              <Link
-                href={href}
-                hrefLang={item === 'es' ? 'es-MX' : 'en'}
-                lang={item === 'es' ? 'es-MX' : 'en'}
-                className={`transition ${isActive ? active : muted}`}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                {item.toUpperCase()}
-              </Link>
-            </li>
-          )
-        })}
-      </ul>
+    <nav aria-label={dict.nav.language} className={`shrink-0 ${className ?? ''}`}>
+      <LocaleOptions
+        locale={locale}
+        tone={tone}
+        hrefFor={(item) => `${switchLocalePath(pathname, item)}${suffix}`}
+      />
     </nav>
   )
 }
@@ -62,17 +95,9 @@ function LanguageSwitchFallback({
   tone?: 'light' | 'dark'
   locale: Locale
 }) {
-  const muted = tone === 'light' ? 'text-white/45' : 'text-zinc-400'
-  const active = tone === 'light' ? 'text-white' : 'text-[#0A192F]'
-  const divider = tone === 'light' ? 'text-white/25' : 'text-zinc-300'
-
   return (
-    <div className={className} aria-hidden>
-      <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.28em]">
-        <span className={locale === 'es' ? active : muted}>ES</span>
-        <span className={divider}>·</span>
-        <span className={locale === 'en' ? active : muted}>EN</span>
-      </div>
+    <div className={`shrink-0 ${className ?? ''}`} aria-hidden>
+      <LocaleOptions locale={locale} tone={tone} />
     </div>
   )
 }

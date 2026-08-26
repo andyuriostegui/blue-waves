@@ -31,7 +31,7 @@ export default function RouteMap() {
               <div className="absolute bottom-4 right-4 border-r border-b border-zinc-200 w-10 h-10 pointer-events-none" />
             </div>
 
-            <div className="relative -mt-12 mx-auto md:absolute md:-bottom-8 md:-right-8 md:mt-0 bg-[#0A192F] text-white p-6 md:p-10 rounded-sm shadow-2xl z-20 w-[85%] md:w-[280px]">
+            <div className="relative z-20 mx-auto mt-4 w-full max-w-md bg-[#0A192F] p-6 text-white shadow-2xl md:absolute md:-bottom-8 md:-right-8 md:mt-0 md:w-[280px] md:max-w-none md:p-10">
               <Navigation className="mb-4 text-blue-400" size={28} strokeWidth={1.5} />
               <p className="text-[7px] md:text-[9px] uppercase tracking-[0.4em] font-bold text-white/50 mb-1 md:mb-2">{dict.journey.privateRoute}</p>
               <h4 className="font-serif text-xl md:text-3xl italic leading-tight mb-2 md:mb-4">{dict.journey.routeTitle}</h4>
@@ -41,7 +41,7 @@ export default function RouteMap() {
             </div>
           </motion.div>
 
-          <div className="lg:col-span-5 space-y-10 md:space-y-12 mt-16 md:mt-0 px-2 md:px-0">
+          <div className="lg:col-span-5 space-y-10 md:space-y-12 mt-10 md:mt-0 px-0">
             <div>
               <span className="text-[8px] md:text-[9px] tracking-[0.6em] uppercase text-zinc-400 font-bold mb-3 md:mb-4 block">{dict.journey.kicker}</span>
               <h2 className="font-serif text-4xl md:text-6xl italic leading-[1.1] text-[#0A192F]">

@@ -44,7 +44,7 @@ export default function HomePage({ yachts }: { yachts: Yacht[] }) {
   }
 
   return (
-    <div className={`${serif.variable} ${sans.variable} bg-[#F4F4F4] min-h-screen font-sans text-[#0A192F] selection:bg-[#0A192F] selection:text-white scroll-smooth`}>
+    <div className={`${serif.variable} ${sans.variable} bg-[#F4F4F4] min-h-screen overflow-x-hidden font-sans text-[#0A192F] selection:bg-[#0A192F] selection:text-white scroll-smooth`}>
       <main className="flex flex-col">
         <Hero scrollToContact={scrollToContact} />
         <AboutTrust />

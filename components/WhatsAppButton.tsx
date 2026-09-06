@@ -5,9 +5,9 @@ import { usePathname } from 'next/navigation';
 export default function WhatsAppButton() {
   const pathname = usePathname();
   const isDashboardPage = pathname?.startsWith('/dashboard');
+  const isLinksPage = pathname === '/links';
 
-  // Si estamos en el dashboard, no renderiza nada (se oculta)
-  if (isDashboardPage) return null;
+  if (isDashboardPage || isLinksPage) return null;
 
   const phoneNumber = "+5219982322661"; // Asegúrate de que este sea el número real
   const message = "Hola Blue Waves, me gustaría solicitar información sobre la flota de yates.";

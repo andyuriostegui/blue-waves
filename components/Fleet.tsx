@@ -142,6 +142,7 @@ export default function Fleet({
                   sizes="(max-width: 768px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F] via-transparent to-transparent opacity-70 md:opacity-50 md:group-hover:opacity-80 transition-opacity duration-500" />
+                <PriceCorners name={yacht.name} />
                 <div className="absolute inset-x-0 bottom-0 flex justify-center px-3 pb-3 md:px-6 md:pb-8">
                   <Link
                     href={localizePath(locale, `/yates/${getYachtSlug(yacht)}`)}
@@ -217,6 +218,8 @@ export default function Fleet({
                     priority
                     unoptimized
                   />
+                  <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
+                  <PriceCorners name={selectedYacht.name} avoidClose />
 
                   {/* Flechas de navegación */}
                   {(selectedYacht.images?.length ?? 0) > 1 && (
@@ -373,6 +376,51 @@ export default function Fleet({
         )}
       </AnimatePresence>
     </section>
+  );
+}
+
+function normalizeYachtName(name: string) {
+  return name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function getYachtPrice(name: string): number | null {
+  const n = normalizeYachtName(name);
+
+  if (n.includes('mavie')) return 15000;
+  if (n.includes('seafari')) return 19000;
+  if (n.includes('san remo') || n.includes('sunseeker')) return 20000;
+  if (n.includes('pershing') || n.includes('principe')) return 32000;
+  if (n.includes('vive') || n.includes('dyna')) return 72000;
+  if (n.includes('golden')) return null;
+  if (n.includes('azimut')) return 114000;
+  return null;
+}
+
+function PriceCorners({ name, avoidClose = false }: { name: string; avoidClose?: boolean }) {
+  const mxn = getYachtPrice(name);
+  if (!mxn) return null;
+
+  return (
+    <div
+      className={`absolute top-2.5 md:top-5 z-10 pointer-events-none text-right ${
+        avoidClose ? 'right-14 md:right-5' : 'right-2.5 md:right-5'
+      }`}
+    >
+      <p className="text-[7px] md:text-[10px] tracking-[0.42em] uppercase text-white font-bold drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
+        MXN
+      </p>
+      <p
+        className="font-serif italic text-white text-[17px] md:text-[32px] leading-none mt-0.5"
+        style={{ textShadow: '0 2px 14px rgba(0,0,0,0.85), 0 0 22px rgba(255,255,255,0.28)' }}
+      >
+        ${mxn.toLocaleString('es-MX')}
+      </p>
+    </div>
   );
 }
 

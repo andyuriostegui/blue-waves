@@ -9,10 +9,11 @@ export default function WhatsAppButton() {
   const pathname = usePathname();
   const isDashboardPage = pathname?.startsWith('/dashboard');
   const isYachtPage = pathname?.includes('/yates');
+  const isLinksPage = pathname === '/links';
   const locale = getLocaleFromPathname(pathname);
   const dict = getDictionary(locale);
 
-  if (isDashboardPage) return null;
+  if (isDashboardPage || isLinksPage) return null;
 
   const whatsappUrl = getWhatsAppUrl(dict.whatsapp.default);
 

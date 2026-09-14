@@ -4,6 +4,8 @@ import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  // Keep the existing payments API contract; stripe-node types target its latest API.
+  // @ts-expect-error Stripe supports the pinned 2024-06-20 API at runtime.
   apiVersion: '2024-06-20',
 })
 

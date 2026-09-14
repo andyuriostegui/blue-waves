@@ -2,9 +2,22 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { DEFAULT_LOCALE, hasLocale } from '@/lib/i18n/config'
 
+const LOCALE_EXEMPT_SEGMENTS = new Set([
+  'api',
+  'dashboard',
+  'auth',
+  'links',
+  'pago-exitoso',
+  'pay',
+])
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const firstSegment = pathname.split('/')[1] ?? ''
+
+  if (LOCALE_EXEMPT_SEGMENTS.has(firstSegment)) {
+    return NextResponse.next()
+  }
 
   if (hasLocale(firstSegment) && firstSegment === DEFAULT_LOCALE) {
     const url = request.nextUrl.clone()
@@ -29,6 +42,6 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api/|dashboard(?:/|$)|auth(?:/|$)|_next/|favicon.ico|sitemap.xml|robots.txt|icon.png|.*\\..*).*)',
+    '/((?!api/|dashboard(?:/|$)|auth(?:/|$)|links(?:/|$)|pago-exitoso(?:/|$)|pay(?:/|$)|_next/|favicon.ico|sitemap.xml|robots.txt|icon.png|.*\\..*).*)',
   ],
 }

@@ -14,6 +14,7 @@ export const SITE_WHATSAPP_NUMBER = SITE_PHONE.replace(/\D/g, '')
 export const SITE_EMAIL = 'concierge@bluewaves.com'
 export const SITE_INSTAGRAM = 'https://www.instagram.com/cancunbluewaves/'
 export const SITE_FACEBOOK = 'https://www.facebook.com/bluewavescancun'
+export const META_PIXEL_ID = '1081968848097594'
 export const SITE_LOCATION = 'Cancún, Quintana Roo, México'
 export const SITE_TITLE = 'Renta de Yates en Cancún | Blue Waves'
 export const SITE_OG_TITLE = 'Renta de yates de lujo en Cancún | Blue Waves'

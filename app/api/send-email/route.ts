@@ -1,11 +1,19 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
-// Inicializamos Resend con la API KEY desde el .env
-const resend = new Resend(process.env.RESEND_API_KEY);
+// El servicio de correo se inicializa únicamente al recibir una solicitud.
+
 
 export async function POST(req: Request) {
   try {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: 'El envío de correo no está configurado. Contacta a Blue Waves por WhatsApp.' },
+        { status: 503 },
+      );
+    }
+    const resend = new Resend(apiKey);
     // 1. Leemos los datos del formulario
     const body = await req.json();
     const { full_name, email, phone, service_type, budget, notes } = body;

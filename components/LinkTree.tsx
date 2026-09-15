@@ -1,6 +1,7 @@
 'use client'
 
 import Image from "next/image";
+import InstagramReels from "./InstagramReels";
 import { motion } from "framer-motion";
 
 const INSTAGRAM = "https://www.instagram.com/bluewavescancun/";
@@ -37,24 +38,6 @@ const links = [
   },
 ];
 
-const reels = [
-  {
-    src: "/links/reel-yacht.mp4",
-    poster: "/links/preview-yacht.jpg",
-    label: "VIVE",
-  },
-  {
-    src: "/links/reel-waves.mp4",
-    poster: "/links/preview-waves.jpg",
-    label: "Caribe",
-  },
-  {
-    src: "/links/reel-deck.mp4",
-    poster: "/links/preview-deck.jpg",
-    label: "On Deck",
-  },
-];
-
 export default function LinkTree() {
   return (
     <div className="relative min-h-screen font-sans text-white selection:bg-white selection:text-[#0A192F] overflow-x-hidden">
@@ -71,7 +54,7 @@ export default function LinkTree() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0B2A30]/85 via-[#0B2A30]/80 to-[#0A192F]" />
       </div>
 
-      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col items-center px-6 pb-16 pt-10">
+      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center px-3 sm:px-6 pb-16 pt-10">
         <motion.div
           initial={{ y: 10 }}
           animate={{ y: 0 }}
@@ -105,7 +88,7 @@ export default function LinkTree() {
           </p>
         </motion.div>
 
-        <nav className="mt-8 flex w-full flex-col gap-2.5">
+        <nav className="mt-8 flex w-full max-w-[400px] flex-col gap-2.5">
           {links.map((link, i) => {
             const Icon = link.icon;
             return (
@@ -130,45 +113,7 @@ export default function LinkTree() {
           })}
         </nav>
 
-        <motion.section
-          initial={{ y: 8 }}
-          animate={{ y: 0 }}
-          transition={{ delay: 0.25, duration: 0.4 }}
-          className="mt-10 w-full"
-        >
-          <div className="mb-4">
-            <span className="text-[8px] font-bold uppercase tracking-[0.35em] text-white/55">
-              La experiencia
-            </span>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2">
-            {reels.map((reel) => (
-              <a
-                key={reel.src}
-                href={INSTAGRAM}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative aspect-[9/16] overflow-hidden rounded-lg border border-white/10 bg-black/30"
-              >
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  poster={reel.poster}
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                >
-                  <source src={reel.src} type="video/mp4" />
-                </video>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-                <span className="absolute bottom-2 left-2 text-[7px] font-bold uppercase tracking-[0.25em] text-white/80">
-                  {reel.label}
-                </span>
-              </a>
-            ))}
-          </div>
-        </motion.section>
+        <InstagramReels />
 
         <p className="mt-auto pt-12 text-center text-[8px] uppercase tracking-[0.5em] text-white/40">
           © 2026 Blue Waves · Cancún

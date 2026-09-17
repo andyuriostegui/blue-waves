@@ -9,8 +9,8 @@ import { localizePath } from '@/lib/i18n/config'
 import { getWhatsAppUrl } from '@/lib/site'
 import styles from './reviews.module.css'
 
-// Existing Google Maps profile supplied by Blue Waves. Google handles publication.
-const GOOGLE_PROFILE_URL = 'https://maps.app.goo.gl/QxeWm9SD3pYdwsmA8'
+// Direct Google review composer for Blue Waves. Google handles publication.
+const GOOGLE_REVIEW_URL = 'https://g.page/r/CdW-vGfJmzdlEBI/review'
 
 const copy = {
   es: {
@@ -29,7 +29,7 @@ const copy = {
     continue: 'Preparar mi comentario', privacy: 'Tú eliges dónde compartirlo. Nada se envía automáticamente.',
     ready: 'TUS PALABRAS, TU ELECCIÓN', shareTitle: 'Dale un destino a tu recuerdo.', shareIntro: 'Revisa tu comentario y elige cómo compartirlo. Puedes usar ambas opciones.',
     preview: 'TU COMENTARIO', edit: 'Editar', copy: 'Copiar comentario', copied: 'Comentario copiado', copyError: 'No pudimos copiarlo. Selecciona y copia el texto de tu comentario manualmente.',
-    google: 'Compártelo en Google', googleText: 'Copia tu comentario, abre nuestro perfil y elige «Escribir una reseña». Allí podrás pegarlo, marcar las estrellas y añadir tus fotos.',
+    google: 'Compártelo en Google', googleText: 'Copia tu comentario y continúa a Google. Se abrirá directo el formulario de reseña: allí podrás pegarlo, marcar las estrellas y añadir tus fotos.',
     googleAction: 'Continuar en Google', googleNote: 'Tu reseña será pública cuando la publiques en Google. Puede pedirte iniciar sesión.',
     privateTitle: 'Solo para Blue Waves', privateText: '¿Prefieres contárnoslo en privado? Abriremos WhatsApp con tu comentario listo para que lo revises y lo envíes a nuestro equipo.',
     privateAction: 'Abrir WhatsApp', privateNote: 'El comentario no se publica en la web ni se envía hasta que tú lo confirmes en WhatsApp.',
@@ -52,7 +52,7 @@ const copy = {
     continue: 'Prepare my comment', privacy: 'You choose where to share. Nothing is sent automatically.',
     ready: 'YOUR WORDS, YOUR CHOICE', shareTitle: 'Give your memory a destination.', shareIntro: 'Review your comment and choose how to share it. You can use both options.',
     preview: 'YOUR COMMENT', edit: 'Edit', copy: 'Copy comment', copied: 'Comment copied', copyError: 'We could not copy it. Please select and copy your comment manually.',
-    google: 'Share it on Google', googleText: 'Copy your comment, open our profile and choose “Write a review”. You can paste it, select your stars and add photos there.',
+    google: 'Share it on Google', googleText: 'Copy your comment and continue to Google. It opens the review form directly so you can paste it, select your stars and add photos.',
     googleAction: 'Continue to Google', googleNote: 'Your review becomes public when you publish it on Google. You may need to sign in.',
     privateTitle: 'Just for Blue Waves', privateText: 'Would you rather tell us privately? We will open WhatsApp with your comment ready for you to review and send to our team.',
     privateAction: 'Open WhatsApp', privateNote: 'Your comment is not published on our website or sent until you confirm it in WhatsApp.',
@@ -161,7 +161,7 @@ export default function ReviewExperience() {
                 <p>{t.googleText}</p>
                 <button className={styles.copyButton} onClick={copyComment} type="button">{clipboard === 'copied' ? <Check size={15} /> : <Copy size={15} />}{clipboard === 'copied' ? t.copied : t.copy}</button>
                 <p className={styles.clipboardStatus} role="status">{clipboard === 'error' ? t.copyError : clipboard === 'copied' ? t.copied : ''}</p>
-                <a className={styles.primary} href={GOOGLE_PROFILE_URL} target="_blank" rel="noopener noreferrer">{t.googleAction}<ArrowRight size={17} /></a>
+                <a className={styles.primary} href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">{t.googleAction}<ArrowRight size={17} /></a>
                 <p className={styles.destinationNote}>{t.googleNote}</p>
               </div>
               <div className={styles.destination}>

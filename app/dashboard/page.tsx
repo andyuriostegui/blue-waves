@@ -107,10 +107,21 @@ export default function DashboardPage() {
     return Promise.all(uploadPromises)
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFiles(e.target.files)
-      setPreviewUrls(Array.from(e.target.files).map(f => URL.createObjectURL(f)))
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return
+    const selected = e.target.files
+    setFiles(selected)
+    try {
+      const urls = Array.from(selected).map((file) => URL.createObjectURL(file))
+      setPreviewUrls((current) => {
+        current.forEach((url) => URL.revokeObjectURL(url))
+        return urls
+      })
+    } catch {
+      setPreviewUrls((current) => {
+        current.forEach((url) => URL.revokeObjectURL(url))
+        return Array.from(selected).map((file) => URL.createObjectURL(file))
+      })
     }
   }
 
@@ -390,7 +401,8 @@ export default function DashboardPage() {
                     <div className="flex items-center justify-center gap-2"><ImageIcon size={16} /> SUBIR FOTOS</div>
                     <input type="file" multiple accept="image/*" className="hidden" onChange={handleFileChange} />
                 </label>
-                {previewUrls.length > 0 && <div className="grid grid-cols-3 gap-3 pt-2">{previewUrls.map((url, i) => <img key={i} src={url} className="h-20 w-full object-cover rounded-xl border shadow-inner" />)}</div>}
+                <p className="px-2 text-center text-[10px] font-bold uppercase tracking-wide text-zinc-400">La primera foto es la portada.</p>
+                {previewUrls.length > 0 && <div className="grid grid-cols-3 gap-3 pt-2">{previewUrls.map((url, i) => <div key={i} className="relative"><img src={url} alt="" className="h-20 w-full object-cover rounded-xl border shadow-inner" />{i === 0 && <span className="absolute top-1 left-1 rounded-full bg-[#0A192F] px-1.5 py-0.5 text-[7px] font-black uppercase tracking-wide text-white">Portada</span>}</div>)}</div>}
                 <button type="submit" disabled={saving} className={`w-full py-4 rounded-2xl ${neuBtn} text-blue-600 font-black uppercase mt-6 tracking-widest text-sm`}>
                   {saving ? <Loader2 className="animate-spin" size={16} /> : 'PUBLICAR EMBARCACIÓN ⚓'}
                 </button>

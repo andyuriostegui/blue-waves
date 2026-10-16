@@ -263,6 +263,339 @@ Ready to cruise: towels, snorkel, a full drinks bar and snacks for a perfect day
       'Unlimited ice (1 bag per hour)',
     ],
   },
+  atenea: {
+    description: `The name is on the bow. Atenea is a 53-foot Sea Ray with a flybridge and an open foredeck, ready for a private charter out of Cancún.
+
+The deck keeps the group in the Caribbean sun. Below, 2 cabins and 2 bathrooms give you a place to slow down without leaving the boat.
+
+Highlights:
+
+Sea Ray 53’: a classic profile, with Atenea on the hull.
+
+Flybridge and bow: the day is lived upstairs, facing the water.
+
+Interior: 2 cabins and 2 bathrooms.`,
+    features: [
+      '53-foot Sea Ray',
+      'Flybridge',
+      'Bow sundeck',
+      '2 cabins',
+      '2 bathrooms',
+    ],
+    includes: [],
+  },
+  belleza: {
+    description: `Belleza lives up to the name. A 60-foot Fairline Squadron: European lines, a flybridge, and one continuous deck from the bow sunpad to the stern.
+
+She takes a group of up to 15. Inside, 2 cabins and 2 bathrooms are the quiet point when the Caribbean sun is high.
+
+Highlights:
+
+Fairline Squadron 60’: real presence in the bay.
+
+Flybridge: the high view over turquoise water.
+
+Up to 15 guests, with 2 cabins and 2 bathrooms.`,
+    features: [
+      '60-foot Fairline Squadron',
+      'Flybridge',
+      'Bow sunpad',
+      'Full-length deck',
+      '2 cabins',
+      '2 bathrooms',
+      'Up to 15 guests',
+    ],
+    includes: [],
+  },
+  calypso: {
+    description: `Calypso is an open-deck Sea Ray Sundancer. The bow is for the sun, the bimini covers the helm, and the interior salon slows the day when the group wants shade.
+
+She is the intimate charter: a private day in the Cancún Caribbean, the city on the horizon and the water right off the swim platform.
+
+Highlights:
+
+Sea Ray Sundancer: dark hull and teak deck.
+
+Open bow and a bimini over the helm.
+
+Interior salon for a break.`,
+    features: [
+      'Sea Ray Sundancer',
+      'Bow sundeck',
+      'Bimini over the helm',
+      'Interior salon',
+      'Swim platform',
+    ],
+    includes: [],
+  },
+  comaye: {
+    description: `Comaye is a 53-foot yacht with a clean sport deck. Bow sunpad, a long run of windows, and a teak swim platform: the white profile reads clearly from the bay.
+
+She is set for a group of up to 15 on a private charter through the Cancún Caribbean.
+
+Highlights:
+
+53 feet: social space without losing the sport line.
+
+Bow and swim platform for the water.
+
+Up to 15 guests.`,
+    features: [
+      '53 feet',
+      'Bow sundeck',
+      'Swim platform',
+      'Sport deck',
+      'Up to 15 guests',
+    ],
+    includes: [],
+  },
+  dejavu: {
+    description: `Dejavu is a 44-foot Sea Ray. The open bow faces the turquoise and the hardtop covers the helm, flag up and Cancún behind.
+
+She takes a group of up to 15. The right size for a day of sun, a long stop, and a jump in the water.
+
+Highlights:
+
+Sea Ray 44’: a wide bow for the sun.
+
+Hardtop over the helm.
+
+Up to 15 guests.`,
+    features: [
+      '44-foot Sea Ray',
+      'Bow sundeck',
+      'Hardtop',
+      'Up to 15 guests',
+    ],
+    includes: [],
+  },
+  forever: {
+    description: `Forever is a 50-foot Prestige. A French sport yacht: continuous side windows, a deck made for being outside, and a line that looks sharp against Cancún blue.
+
+On board: 2 cabins and 2 bathrooms, with room for 15 on a private day.
+
+Highlights:
+
+Prestige 50’: sport design, windows from end to end.
+
+2 cabins and 2 bathrooms.
+
+Up to 15 guests.`,
+    features: [
+      '50-foot Prestige',
+      'Continuous windows',
+      'Exterior deck',
+      '2 cabins',
+      '2 bathrooms',
+      'Up to 15 guests',
+    ],
+    includes: [],
+  },
+  mia: {
+    description: `Mia is an open-bow Chaparral, her name on the black hull, based in Puerto Juárez. Bimini, a social deck, and an outboard: the boat for the mangrove, the bay, and the water close by.
+
+She is not a multi-deck yacht. She is the quick plan, in a group, with the Caribbean one step off the platform.
+
+Highlights:
+
+Chaparral: black hull, Mia in plain sight.
+
+Open bow, bimini, and a social deck.
+
+Departs from Puerto Juárez.`,
+    features: [
+      'Chaparral',
+      'Open bow',
+      'Bimini',
+      'Social deck',
+      'Puerto Juárez',
+    ],
+    includes: [],
+  },
+  'miami-mistress': {
+    description: `Miami Mistress is a 51-foot Sea Ray flybridge. The upper helm sees the whole horizon; the swim platform drops to the water, with room for the inflatable alongside.
+
+Below: 3 cabins and 2 bathrooms. On deck, a group of up to 17 for a full day toward Isla Mujeres.
+
+Highlights:
+
+51’ Sea Ray flybridge: the view from the bridge.
+
+3 cabins and 2 bathrooms.
+
+Up to 17 guests, with a swim platform.`,
+    features: [
+      '51-foot Sea Ray',
+      'Flybridge',
+      '3 cabins',
+      '2 bathrooms',
+      'Swim platform',
+      'Up to 17 guests',
+    ],
+    includes: [],
+  },
+  necessity: {
+    description: `Necessity I is a 50-foot Sea Ray. Green hull, a bimini flybridge, and the name on the stern. The bridge takes the helm; the swim platform steps straight into the Caribbean.
+
+She is set for groups of up to 17 on a day charter from Cancún.
+
+Highlights:
+
+50’ Sea Ray: flybridge and a green hull.
+
+Necessity on the stern.
+
+Up to 17 guests and a swim platform.`,
+    features: [
+      '50-foot Sea Ray',
+      'Flybridge',
+      'Bimini',
+      'Swim platform',
+      'Up to 17 guests',
+    ],
+    includes: [],
+  },
+  atlantido: {
+    description: `Atlantido is a 50-foot Fairline Squadron. A white hull with black graphics, a bimini flybridge, and the name in script across the stern.
+
+The bow sunpad faces the Caribbean and the teak platform steps into the water. Inside, a white salon with wood holds 2 cabins and 2 bathrooms, for a group of up to 12.
+
+Highlights:
+
+Fairline Squadron 50’: flybridge and a sport line.
+
+Bow and a teak swim platform.
+
+2 cabins, 2 bathrooms, and up to 12 guests.`,
+    features: [
+      '50-foot Fairline Squadron',
+      'Flybridge',
+      'Bow sundeck',
+      'Teak platform',
+      'Interior salon',
+      '2 cabins',
+      '2 bathrooms',
+      'Up to 12 guests',
+    ],
+    includes: [],
+  },
+  beluga: {
+    description: `Beluga is a Lagoon 450, a 46-foot sailing catamaran. Two white hulls, sail up, and nets on the bow: the day crosses on the wind, from Cancún into the Caribbean.
+
+The flybridge takes the helm under the bimini, with a sunpad aft. The deck dining table opens onto the salon and the galley. Below: 4 cabins and 2 bathrooms, for a group of up to 15.
+
+Highlights:
+
+Lagoon 450: a sailing catamaran, two hulls.
+
+Flybridge, sunpad, and an aft dining table.
+
+4 cabins, 2 bathrooms, and up to 15 guests.`,
+    features: [
+      'Lagoon 450',
+      'Sailing catamaran',
+      'Flybridge',
+      'Aft sunpad',
+      'Deck dining',
+      'Salon and galley',
+      '4 cabins',
+      '2 bathrooms',
+      'Up to 15 guests',
+    ],
+    includes: [],
+  },
+  'dolce-far-niente': {
+    description: `The name is on the stern, and Montego Bay is written under it. Dolce Far Niente is a 44-foot Sea Ray: teak decks, a bimini over the helm, and a curved salon for the group.
+
+She takes a day of up to 15. Below: 1 cabin and 2 bathrooms, with the galley beside the sofa.
+
+Highlights:
+
+Sea Ray 44’: teak, a bimini, and the name on the stern.
+
+Curved salon and a galley on board.
+
+Up to 15 guests, with 1 cabin and 2 bathrooms.`,
+    features: [
+      '44-foot Sea Ray',
+      'Teak deck',
+      'Bimini',
+      'Curved salon',
+      'Galley',
+      '1 cabin',
+      '2 bathrooms',
+      'Up to 15 guests',
+    ],
+    includes: [],
+  },
+  'slice-of-life': {
+    description: `Slice of Life carries the name on the transom, with Cancún underneath. She is a white-hardtop Sea Ray Sundancer: a bow sunpad, a teak cockpit, and a swim platform.
+
+The bimini covers the helm and the cockpit seats. Inside, a cabin and a wood galley slow the day down without leaving the boat.
+
+Highlights:
+
+Sea Ray Sundancer: white hardtop and the name on the stern.
+
+Open bow and a cockpit for the group.
+
+Cabin, galley, and a swim platform.`,
+    features: [
+      'Sea Ray Sundancer',
+      'Hardtop',
+      'Bow sundeck',
+      'Teak cockpit',
+      'Cabin',
+      'Galley',
+      'Swim platform',
+    ],
+    includes: [],
+  },
+  'v-v': {
+    description: `V&V is a white flybridge motor yacht. A hardtop on the bridge, a bow sunpad, and an aft deck for sitting facing the sea while the Caribbean runs past.
+
+The profile is a large yacht: several decks, a helm with navigation screens, and room for a long day on the water.
+
+Highlights:
+
+Flybridge with a hardtop.
+
+Bow sunpad and aft deck.
+
+Helm with navigation screens.`,
+    features: [
+      'Flybridge with hardtop',
+      'Bow sunpad',
+      'Aft deck',
+      'Helm with screens',
+    ],
+    includes: [],
+  },
+  'island-gypsy': {
+    description: `Island Gypsy carries the name in script across the stern. She is a Sea Ray flybridge: a white hull with a navy stripe, a bow sunpad, and teak decks.
+
+The hardtop covers the cockpit and its curved seats. Inside, a cream-leather salon opens onto a wood galley, with a bathroom and shower.
+
+Highlights:
+
+Sea Ray: flybridge, teak, and Island Gypsy on the stern.
+
+Bow sunpad and a cockpit under the hardtop.
+
+Salon, galley, and a bathroom with shower.`,
+    features: [
+      'Sea Ray',
+      'Flybridge',
+      'Bow sundeck',
+      'Teak deck',
+      'Hardtop',
+      'Salon',
+      'Galley',
+      'Bathroom with shower',
+      'Swim platform',
+    ],
+    includes: [],
+  },
 }
 
 export function localizeYacht(yacht: Yacht, locale: Locale): Yacht {

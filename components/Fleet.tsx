@@ -393,11 +393,22 @@ function getYachtPrice(name: string): number | null {
 
   if (n.includes('mavie')) return 15000;
   if (n.includes('seafari')) return 19000;
-  if (n.includes('san remo') || n.includes('sunseeker')) return 20000;
+  if (n.includes('san remo') || n.includes('sunseeker') || n.includes('comaye')) return 20000;
   if (n.includes('pershing') || n.includes('principe')) return 32000;
+  // "miami" contains "mia"
+  if (n.includes('miami')) return 25000;
+  if (n.includes('mia')) return 9000;
   if (n.includes('vive') || n.includes('dyna')) return 72000;
   if (n.includes('golden')) return null;
+  if (n.includes('v v')) return 114000;
   if (n.includes('azimut')) return 114000;
+  if (n.includes('atenea')) return 16000;
+  if (n.includes('belleza')) return 48000;
+  if (n.includes('calypso')) return 15000;
+  if (n.includes('dejavu') || n.includes('deja vu')) return 15000;
+  if (n.includes('dolce')) return 16000;
+  if (n.includes('forever')) return 28000;
+  if (n.includes('necessity')) return 23000;
   return null;
 }
 

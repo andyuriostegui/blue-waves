@@ -1,6 +1,7 @@
-import fs from 'fs'
-import path from 'path'
+import manifestJson from '@/lib/fleet-manifest.json'
 import type { Yacht } from '@/lib/yachts'
+
+const FLEET_FILES = manifestJson as Record<string, string[]>
 
 const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp'])
 
@@ -528,19 +529,17 @@ function publicSrc(folder: string, file: string) {
   return `/${folder}/${file}`
 }
 
-function listFolderImages(folder: string): string[] {
-  const dir = path.join(process.cwd(), 'public', folder)
-  let files: string[] = []
-  try {
-    files = fs.readdirSync(dir)
-  } catch {
-    return []
-  }
+function fileExt(file: string) {
+  const dot = file.lastIndexOf('.')
+  return dot === -1 ? '' : file.slice(dot).toLowerCase()
+}
 
+function listFolderImages(folder: string): string[] {
+  const files = FLEET_FILES[folder] ?? []
   const images = files.filter((file) => {
     if (/copia/i.test(file)) return false
     if (folder === 'ISLAN GYPSI' && file.toLowerCase() === 'dji_0276.jpg') return false
-    return IMAGE_EXT.has(path.extname(file).toLowerCase())
+    return IMAGE_EXT.has(fileExt(file))
   })
 
   const cover = COVERS[folder]
